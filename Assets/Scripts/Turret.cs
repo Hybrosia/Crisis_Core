@@ -2,15 +2,11 @@ using UnityEngine;
 
 public class Turret : MonoBehaviour
 {
-    
-   
     [SerializeField] private PlayerData playerData;
     [Space(5)]
     [SerializeField] private float range = 10f;
     [SerializeField] private float rotateSpeed = 5f;
     [SerializeField] private float reloadTime = 1f;
-   
-
  
     private float _reloadTimeCounter;
     private float _distance;
@@ -21,8 +17,7 @@ public class Turret : MonoBehaviour
     private Transform _turretHead;
     
     // public float frameRateInterval = 30;
-
-
+    
     private void Awake()
     {
        _targetLayerMask = LayerMask.GetMask("Player");
@@ -33,12 +28,10 @@ public class Turret : MonoBehaviour
     {
         UpdateDirectionDistance();
         
-       
         if (!TargetIsInRange() )
             return; LookTowards();
         if (!TargetIsInView())
             return; AttackTarget();
-        
     }
 
     private bool TargetIsInRange()
@@ -70,7 +63,6 @@ public class Turret : MonoBehaviour
 
     private void LookTowards()
     {
-        
         Quaternion toRotation = Quaternion.LookRotation(_direction, _turretHead.up);
         _turretHead.rotation = Quaternion.Lerp(_turretHead.rotation, toRotation, rotateSpeed * Time.deltaTime);
         
