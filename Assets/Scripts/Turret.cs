@@ -17,7 +17,7 @@ public class Turret : MonoBehaviour
     private Vector3 _heading;
     private Vector3 _direction;
     private Vector3 _currentRotation;
-    private LayerMask _toHitLayerMask;
+    private LayerMask _targetLayerMask;
     private Transform _turretHead;
     
     // public float frameRateInterval = 30;
@@ -25,7 +25,7 @@ public class Turret : MonoBehaviour
 
     private void Awake()
     {
-       _toHitLayerMask = LayerMask.GetMask("Player");
+       _targetLayerMask = LayerMask.GetMask("Player");
        _turretHead = transform.GetChild(0);
     }
 
@@ -37,7 +37,7 @@ public class Turret : MonoBehaviour
         if (!TargetIsInRange() )
             return; LookTowards();
         if (!TargetIsInView())
-            return; AttackPlayer();
+            return; AttackTarget();
         
     }
 
@@ -48,10 +48,10 @@ public class Turret : MonoBehaviour
 
     private bool TargetIsInView()
     {
-        return Physics.Raycast(_turretHead.position, _direction, range, _toHitLayerMask);
+        return Physics.Raycast(_turretHead.position, _direction, range, _targetLayerMask);
     }
 
-    private void AttackPlayer()
+    private void AttackTarget()
     {
         if (!(Time.time > _reloadTimeCounter)) return;
         
