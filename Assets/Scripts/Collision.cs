@@ -11,7 +11,7 @@ public class Collision : MonoBehaviour
     [SerializeField] private float movementSpeed = 0.5f;
     [SerializeField] private LayerMask whatIsTerrain;
 
-    [SerializeField] private bool _isGrounded;
+    private bool _isGrounded;
     private CapsuleCollider _collider;
     private float fallingSpeed;
 
