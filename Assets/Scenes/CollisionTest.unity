@@ -833,7 +833,6 @@ MonoBehaviour:
   whatIsTerrain:
     serializedVersion: 2
     m_Bits: 4294967295
-  _isGrounded: 1
 --- !u!54 &1653112343
 Rigidbody:
   m_ObjectHideFlags: 0
