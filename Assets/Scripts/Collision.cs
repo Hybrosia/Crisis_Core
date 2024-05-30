@@ -14,12 +14,13 @@ public class Collision : MonoBehaviour
     private bool _isGrounded;
     private CapsuleCollider _collider;
     private float fallingSpeed;
-
+    
     private void Awake()
     {
         _collider = GetComponent<CapsuleCollider>();
     }
 
+    //Adds gravity and actually moves the collider in two steps. The first is for movement, the second for gravity.
     private void FixedUpdate()
     {
         fallingSpeed += gravity * Time.fixedDeltaTime;
@@ -29,11 +30,14 @@ public class Collision : MonoBehaviour
         transform.position += CollideAndSlide(fallingSpeed * Time.fixedDeltaTime * Vector3.down, transform.position, true);
     }
 
+    //Uses the collide and slide algorithm to calculate the movement of the collider based on the given velocity and position,
+    //with small differences if the call is for gravity. Returns the modified movement vector.
     public Vector3 CollideAndSlide(Vector3 velocity, Vector3 position, bool gravityPass)
     {
         return CollideAndSlideRecursive(velocity, position, 0, gravityPass, velocity);
     }
     
+    //The implementation of the collide and slide algorithm
     public Vector3 CollideAndSlideRecursive(Vector3 velocity, Vector3 position, int depth, bool gravityPass,
         Vector3 velocityInitial)
     {
@@ -71,6 +75,7 @@ public class Collision : MonoBehaviour
         return snapToSurface + CollideAndSlideRecursive(leftover, position, depth + 1, gravityPass, velocityInitial);
     }
 
+    //Projects the vector onto the plane defined by the normal, but keeps the magnitude constant.
     private Vector3 ProjectAndScale(Vector3 vector, Vector3 normal)
     {
         return Vector3.ProjectOnPlane(vector, normal).normalized * vector.magnitude;
