@@ -577,6 +577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e694d66855207240897a862b6a3c84d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundCheckDistance: 0.01
   maxBounces: 5
   skinWidth: 0.015
   maxSlopeAngle: 55
@@ -1172,6 +1173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e694d66855207240897a862b6a3c84d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundCheckDistance: 0.01
   maxBounces: 5
   skinWidth: 0.015
   maxSlopeAngle: 55

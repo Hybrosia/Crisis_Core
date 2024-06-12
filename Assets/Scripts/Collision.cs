@@ -1,33 +1,57 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(CapsuleCollider))]
+[RequireComponent(typeof(CapsuleCollider)), RequireComponent(typeof(Rigidbody))]
 public class Collision : MonoBehaviour
 {
+    [SerializeField] private float groundCheckDistance = 0.01f;
     [SerializeField] private int maxBounces = 5;
     [SerializeField] private float skinWidth = 0.015f;
     [SerializeField] private float maxSlopeAngle = 55;
     [SerializeField] private float gravity = 9.81f;
     [SerializeField] private float movementSpeed = 0.5f;
     [SerializeField] private LayerMask whatIsTerrain;
-
-    private bool _isGrounded;
-    private CapsuleCollider _collider;
-    private float fallingSpeed;
     
+    private CapsuleCollider _collider;
+    private Rigidbody _rb;
+    private float fallingSpeed;
+    private bool _isGrounded;
+
     private void Awake()
     {
         _collider = GetComponent<CapsuleCollider>();
+        _rb = GetComponent<Rigidbody>();
     }
 
     //Adds gravity and actually moves the collider in two steps. The first is for movement, the second for gravity.
     private void FixedUpdate()
     {
+        var groundNormal = GetGroundNormal();
+        _isGrounded = groundNormal != Vector3.zero;
+        
         fallingSpeed += gravity * Time.fixedDeltaTime;
         if (_isGrounded) fallingSpeed = 0f;
-
-        transform.position += CollideAndSlide(movementSpeed * Time.fixedDeltaTime * transform.forward, transform.position, false);
-        transform.position += CollideAndSlide(fallingSpeed * Time.fixedDeltaTime * Vector3.down, transform.position, true);
+        
+        var position = transform.position;
+        
+        position += CollideAndSlide(movementSpeed * Time.fixedDeltaTime * transform.forward, position, false);
+        
+        if (_isGrounded) position += CollideAndSlide(Vector3.down, position, true);
+        else position += CollideAndSlide(fallingSpeed * Time.fixedDeltaTime * Vector3.down, position, true);
+        
+        _rb.MovePosition(position);
+        //_rb.Move(position, transform.rotation);
+    }
+    
+    //Finds the normal of the ground below the collider. If there is no ground, returns Vector3.zero.
+    private Vector3 GetGroundNormal()
+    {
+        var position = transform.position;
+        var bottomCenter = position + Vector3.down * (_collider.height * 0.5f - _collider.radius);
+        var topCenter = position + Vector3.up * (_collider.height * 0.5f - _collider.radius);
+        if (Physics.CapsuleCast(bottomCenter, topCenter, _collider.radius - skinWidth, Vector3.down, out var hit,
+                groundCheckDistance, whatIsTerrain)) return hit.normal;
+        return Vector3.zero;
     }
 
     //Uses the collide and slide algorithm to calculate the movement of the collider based on the given velocity and position,
@@ -51,12 +75,12 @@ public class Collision : MonoBehaviour
         if (!Physics.CapsuleCast(bottomCenter, topCenter, _collider.radius - skinWidth, velocity.normalized, out var hit, distance, whatIsTerrain))
             return velocity;
 
-        var snapToSurface = velocity.normalized * (hit.distance - skinWidth);
+        var snapToSurface = Vector3.zero;
+        if (hit.distance > skinWidth) snapToSurface = velocity.normalized * (hit.distance - skinWidth);
+
         var leftover = velocity - snapToSurface;
         var angle = Vector3.Angle(Vector3.up, hit.normal);
-
-        if (snapToSurface.magnitude <= skinWidth) snapToSurface = Vector3.zero;
-
+        
         if (angle <= maxSlopeAngle)
         {
             if (gravityPass) return snapToSurface;
