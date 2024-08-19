@@ -6,12 +6,14 @@ public class InputManager : MonoBehaviour
 
     public static Vector2 Move { get; private set; }
     public static Vector2 Look { get; private set; }
+    public static bool Sprint { get; private set; }
     
 
     private void Update()
     {
         Move = _inputSystem.Player.Move.ReadValue<Vector2>();
         Look = _inputSystem.Player.Look.ReadValue<Vector2>();
+        Sprint = _inputSystem.Player.Sprint.IsPressed();
     }
 
     private void Awake()

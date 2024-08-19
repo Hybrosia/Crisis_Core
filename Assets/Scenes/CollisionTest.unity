@@ -487,7 +487,9 @@ GameObject:
   - component: {fileID: 685205604}
   - component: {fileID: 685205608}
   - component: {fileID: 685205607}
+  - component: {fileID: 685205609}
   - component: {fileID: 685205606}
+  - component: {fileID: 685205610}
   m_Layer: 0
   m_Name: PlayerObject
   m_TagString: Untagged
@@ -581,8 +583,6 @@ MonoBehaviour:
   maxBounces: 5
   skinWidth: 0.015
   maxSlopeAngle: 55
-  gravity: 9.81
-  movementSpeed: 0.5
   whatIsTerrain:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -636,6 +636,36 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &685205609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685205601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3ac8c801a4a57943a2f73d2bd8718b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravity: 9.81
+  movementSpeed: 3
+  jumpSpeed: 10
+  runSpeed: 5
+  moveSmoothTime: 0.3
+  cameraReference: {fileID: 910890033}
+--- !u!114 &685205610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685205601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df6e5b77923a244acadd7b968e5c7a08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &827610913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1177,8 +1207,6 @@ MonoBehaviour:
   maxBounces: 5
   skinWidth: 0.015
   maxSlopeAngle: 55
-  gravity: 0
-  movementSpeed: 0.5
   whatIsTerrain:
     serializedVersion: 2
     m_Bits: 4294967295

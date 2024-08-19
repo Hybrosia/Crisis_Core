@@ -8,43 +8,24 @@ public class Collision : MonoBehaviour
     [SerializeField] private int maxBounces = 5;
     [SerializeField] private float skinWidth = 0.015f;
     [SerializeField] private float maxSlopeAngle = 55;
-    [SerializeField] private float gravity = 9.81f;
-    [SerializeField] private float movementSpeed = 0.5f;
     [SerializeField] private LayerMask whatIsTerrain;
     
     private CapsuleCollider _collider;
-    private Rigidbody _rb;
-    private float fallingSpeed;
     private bool _isGrounded;
 
     private void Awake()
     {
         _collider = GetComponent<CapsuleCollider>();
-        _rb = GetComponent<Rigidbody>();
     }
 
     //Adds gravity and actually moves the collider in two steps. The first is for movement, the second for gravity.
     private void FixedUpdate()
     {
-        var groundNormal = GetGroundNormal();
-        _isGrounded = groundNormal != Vector3.zero;
         
-        fallingSpeed += gravity * Time.fixedDeltaTime;
-        if (_isGrounded) fallingSpeed = 0f;
-        
-        var position = transform.position;
-        
-        position += CollideAndSlide(movementSpeed * Time.fixedDeltaTime * transform.forward, position, false);
-        
-        if (_isGrounded) position += CollideAndSlide(Vector3.down, position, true);
-        else position += CollideAndSlide(fallingSpeed * Time.fixedDeltaTime * Vector3.down, position, true);
-        
-        _rb.MovePosition(position);
-        //_rb.Move(position, transform.rotation);
     }
     
     //Finds the normal of the ground below the collider. If there is no ground, returns Vector3.zero.
-    private Vector3 GetGroundNormal()
+    public Vector3 GetGroundNormal()
     {
         var position = transform.position;
         var bottomCenter = position + Vector3.down * (_collider.height * 0.5f - _collider.radius);
