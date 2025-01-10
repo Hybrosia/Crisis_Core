@@ -24,9 +24,9 @@ public class Movement : MonoBehaviour
     private Vector2 _currentDirection = Vector2.zero;
     private Vector2 _currentDirectionVelocity = Vector2.zero;
 
-    private BreathManager _breathManager; 
-    
-    void Start()
+    private BreathManager _breathManager;
+
+    private void Start()
     {
         _collisionLocal = GetComponent<Collision>();
         _rb = GetComponent<Rigidbody>();
@@ -85,7 +85,4 @@ public class Movement : MonoBehaviour
             print("I am jumping");
         }
     }
-
-
-
 }
