@@ -68,7 +68,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Crouch"",
                     ""type"": ""Button"",
                     ""id"": ""27c5f898-bc57-4ee1-8800-db469aca5fe3"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -77,7 +77,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""f1ba0d36-48eb-4cd5-b651-1c94a6531f70"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -95,7 +95,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Next"",
                     ""type"": ""Button"",
                     ""id"": ""b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -104,7 +104,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Sprint"",
                     ""type"": ""Button"",
                     ""id"": ""641cd816-40e6-41b4-8c3d-04687c349290"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -515,7 +515,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Submit"",
                     ""type"": ""Button"",
                     ""id"": ""7607c7b6-cd76-4816-beef-bd0341cfe950"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -524,7 +524,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Cancel"",
                     ""type"": ""Button"",
                     ""id"": ""15cef263-9014-4fd5-94d9-4e4a6234a6ef"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false

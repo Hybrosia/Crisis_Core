@@ -490,6 +490,7 @@ GameObject:
   - component: {fileID: 685205609}
   - component: {fileID: 685205606}
   - component: {fileID: 685205610}
+  - component: {fileID: 685205611}
   m_Layer: 0
   m_Name: PlayerObject
   m_TagString: Untagged
@@ -653,6 +654,7 @@ MonoBehaviour:
   jumpSpeed: 10
   runSpeed: 5
   moveSmoothTime: 0.3
+  sprintBreath: 2
   cameraReference: {fileID: 910890033}
 --- !u!114 &685205610
 MonoBehaviour:
@@ -666,6 +668,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df6e5b77923a244acadd7b968e5c7a08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &685205611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685205601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ed7d108f21c55c469c4ab021d9a1353, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Breath: 0
+  MaximumBreath: 100
+  timeSinceLastBreathUse: 0
+  timeNeededForBreathRestoration: 1
+  BreathIncrease: 10
 --- !u!1 &827610913
 GameObject:
   m_ObjectHideFlags: 0

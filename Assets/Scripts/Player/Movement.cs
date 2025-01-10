@@ -6,10 +6,11 @@ public class Movement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     
     [SerializeField] private float gravity = 9.81f;
-    [SerializeField] private float movementSpeed = 0.5f;
+    [SerializeField] private float movementSpeed = 5f;
     [SerializeField] private float jumpSpeed = 10f;
-    [SerializeField] private float runSpeed = 5f; 
+    [SerializeField] private float runSpeed = 8f; 
     [SerializeField] [Range(0.0f, 0.5f)] private float moveSmoothTime = 0.3f;
+    [SerializeField] private float sprintBreath = 50;
 
     private Collision collisionLocal; 
     private bool _isGrounded;
@@ -20,17 +21,14 @@ public class Movement : MonoBehaviour
     private Rigidbody _rb;
     private Vector2 _currentDirection = Vector2.zero;
     private Vector2 _currentDirectionVelocity = Vector2.zero;
+
+    private BreathManager _breathManager; 
     
     void Start()
     {
         collisionLocal = GetComponent<Collision>();
-        _rb = GetComponent<Rigidbody>(); 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _rb = GetComponent<Rigidbody>();
+        _breathManager = GetComponent<BreathManager>();
     }
 
     private void FixedUpdate()
@@ -58,11 +56,18 @@ public class Movement : MonoBehaviour
         //_rb.Move(position, transform.rotation);
     }
 
+    //private bool jumpAction => _isGrounded && InputManager.
+
+    private bool sprint() => _isGrounded && InputManager.Sprint && (_breathManager.Breath >= sprintBreath);
+
     private float FindMovementSpeed()
     {
-        if (InputManager.Sprint)
+        if (sprint())
         {
+            _breathManager.Breath -= sprintBreath * Time.deltaTime;
+            _breathManager.timeSinceLastBreathUse = Time.time;
             return runSpeed;
+            
         }
         return movementSpeed;
     }
