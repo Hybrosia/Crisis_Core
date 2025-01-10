@@ -11,6 +11,9 @@ public class Movement : MonoBehaviour
     [SerializeField] private float runSpeed = 8f; 
     [SerializeField] [Range(0.0f, 0.5f)] private float moveSmoothTime = 0.3f;
     [SerializeField] private float sprintBreath = 50;
+    [SerializeField] private float jumpGravity;
+    [SerializeField] private float floatGravity;
+    [SerializeField] private bool canFloat; 
 
     private Collision collisionLocal; 
     private bool _isGrounded;
@@ -54,9 +57,11 @@ public class Movement : MonoBehaviour
         
         _rb.MovePosition(position);
         //_rb.Move(position, transform.rotation);
+        
+        executeJump();
     }
 
-    //private bool jumpAction => _isGrounded && InputManager.
+    private bool jumpAction => _isGrounded && InputManager.JumpPressed;
 
     private bool sprint() => _isGrounded && InputManager.Sprint && (_breathManager.Breath >= sprintBreath);
 
@@ -72,7 +77,15 @@ public class Movement : MonoBehaviour
         return movementSpeed;
     }
 
-    
-    
-    
+    private void executeJump()
+    {
+        if (jumpAction)
+        {
+            
+            print("I am jumping");
+        }
+    }
+
+
+
 }

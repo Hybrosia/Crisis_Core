@@ -650,9 +650,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravity: 9.81
-  movementSpeed: 3
+  movementSpeed: 5
   jumpSpeed: 10
-  runSpeed: 5
+  runSpeed: 10
   moveSmoothTime: 0.3
   sprintBreath: 2
   cameraReference: {fileID: 910890033}
