@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -15,9 +14,9 @@ public class Movement : MonoBehaviour
     [SerializeField] private float floatGravity;
     [SerializeField] private bool canFloat; 
 
-    private Collision collisionLocal; 
+    private Collision _collisionLocal; 
     private bool _isGrounded;
-    private float fallingSpeed;
+    private float _fallingSpeed;
 
     [SerializeField] private GameObject cameraReference; 
 
@@ -29,7 +28,7 @@ public class Movement : MonoBehaviour
     
     void Start()
     {
-        collisionLocal = GetComponent<Collision>();
+        _collisionLocal = GetComponent<Collision>();
         _rb = GetComponent<Rigidbody>();
         _breathManager = GetComponent<BreathManager>();
     }
@@ -39,35 +38,36 @@ public class Movement : MonoBehaviour
         _currentDirection = Vector2.SmoothDamp(_currentDirection, InputManager.Move,
             ref _currentDirectionVelocity, moveSmoothTime);
         
-        var groundNormal = collisionLocal.GetGroundNormal();
+        var groundNormal = _collisionLocal.GetGroundNormal();
         _isGrounded = groundNormal != Vector3.zero;
 
-        var Speed = FindMovementSpeed();
+        var speed = FindMovementSpeed();
         
-        fallingSpeed += gravity * Time.fixedDeltaTime;
-        if (_isGrounded) fallingSpeed = 0f;
+        _fallingSpeed += gravity * Time.fixedDeltaTime;
+        if (_isGrounded) _fallingSpeed = 0f;
         
         var position = transform.position;
         
-        position += collisionLocal.CollideAndSlide(Speed * Time.fixedDeltaTime * (cameraReference.transform.forward * _currentDirection.y + cameraReference.transform.right * 
+        position += _collisionLocal.CollideAndSlide(speed * Time.fixedDeltaTime * (cameraReference.transform.forward * _currentDirection.y + cameraReference.transform.right * 
             _currentDirection.x), position, false);
         
-        if (_isGrounded) position += collisionLocal.CollideAndSlide(Vector3.down, position, true);
-        else position += collisionLocal.CollideAndSlide(fallingSpeed * Time.fixedDeltaTime * Vector3.down, position, true);
+        if (_isGrounded) position += _collisionLocal.CollideAndSlide(Vector3.down, position, true);
+        else position += _collisionLocal.CollideAndSlide(_fallingSpeed * Time.fixedDeltaTime * Vector3.down, position, true);
+        
         
         _rb.MovePosition(position);
         //_rb.Move(position, transform.rotation);
         
-        executeJump();
+        ExecuteJump();
     }
 
-    private bool jumpAction => _isGrounded && InputManager.JumpPressed;
+    private bool JumpAction => _isGrounded && InputManager.JumpPressed;
 
-    private bool sprint() => _isGrounded && InputManager.Sprint && (_breathManager.Breath >= sprintBreath);
+    private bool Sprint() => _isGrounded && InputManager.Sprint && (_breathManager.Breath >= sprintBreath);
 
     private float FindMovementSpeed()
     {
-        if (sprint())
+        if (Sprint())
         {
             _breathManager.Breath -= sprintBreath * Time.deltaTime;
             _breathManager.timeSinceLastBreathUse = Time.time;
@@ -77,9 +77,9 @@ public class Movement : MonoBehaviour
         return movementSpeed;
     }
 
-    private void executeJump()
+    private void ExecuteJump()
     {
-        if (jumpAction)
+        if (JumpAction)
         {
             
             print("I am jumping");
