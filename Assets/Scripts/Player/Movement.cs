@@ -54,14 +54,10 @@ public class Movement : MonoBehaviour
         if (_isGrounded) position += _collisionLocal.CollideAndSlide(Vector3.down, position, true);
         else position += _collisionLocal.CollideAndSlide(_fallingSpeed * Time.fixedDeltaTime * Vector3.down, position, true);
         
-        
         _rb.MovePosition(position);
         //_rb.Move(position, transform.rotation);
         
-        ExecuteJump();
     }
-
-    private bool JumpAction => _isGrounded && InputManager.JumpPressed;
 
     private bool Sprint() => _isGrounded && InputManager.Sprint && (_breathManager.Breath >= sprintBreath);
 
@@ -76,13 +72,23 @@ public class Movement : MonoBehaviour
         }
         return movementSpeed;
     }
+    
+    private bool jumpAction => _isGrounded && InputManager.JumpPressed;
 
-    private void ExecuteJump()
+    bool floatAction() => canFloat && !_isGrounded && InputManager.JumpHeld; 
+    
+    private float FindGravity()
     {
-        if (JumpAction)
+        if (floatAction())
         {
-            
-            print("I am jumping");
+            return floatGravity;
         }
+        else if (!floatAction() && !_isGrounded)
+        {
+            return jumpGravity;
+        }
+
+        return gravity; 
     }
+    
 }
