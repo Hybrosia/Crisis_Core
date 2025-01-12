@@ -4,25 +4,26 @@ public class Movement : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     
-    [SerializeField] private float gravity = 9.81f;
+    [SerializeField] private float airGravity = 9.81f;
     [SerializeField] private float movementSpeed = 5f;
     [SerializeField] private float jumpSpeed = 10f;
     [SerializeField] private float runSpeed = 8f; 
     [SerializeField] [Range(0.0f, 0.5f)] private float moveSmoothTime = 0.3f;
     [SerializeField] private float sprintBreath = 50;
-    [SerializeField] private float jumpGravity;
+    [SerializeField] private float groundGravity;
     [SerializeField] private float floatGravity;
     [SerializeField] private bool canFloat; 
 
     private Collision _collisionLocal; 
     private bool _isGrounded;
-    private float _fallingSpeed;
+    private float _verticalSpeed;
 
     [SerializeField] private GameObject cameraReference; 
 
     private Rigidbody _rb;
     private Vector2 _currentDirection = Vector2.zero;
     private Vector2 _currentDirectionVelocity = Vector2.zero;
+    private bool _jumpPressed;
 
     private BreathManager _breathManager;
 
@@ -31,6 +32,11 @@ public class Movement : MonoBehaviour
         _collisionLocal = GetComponent<Collision>();
         _rb = GetComponent<Rigidbody>();
         _breathManager = GetComponent<BreathManager>();
+    }
+
+    private void Update()
+    {
+        if (!_jumpPressed && InputManager.JumpPressed) _jumpPressed = true;
     }
 
     private void FixedUpdate()
@@ -42,24 +48,38 @@ public class Movement : MonoBehaviour
         _isGrounded = groundNormal != Vector3.zero;
 
         var speed = FindMovementSpeed();
-        
-        _fallingSpeed += gravity * Time.fixedDeltaTime;
-        if (_isGrounded) _fallingSpeed = 0f;
+        TryJump();
+
+        _verticalSpeed -= FindGravity() * Time.fixedDeltaTime;
+        if (_isGrounded && _verticalSpeed < 0f) _verticalSpeed = 0f;
         
         var position = transform.position;
         
-        position += _collisionLocal.CollideAndSlide(speed * Time.fixedDeltaTime * (cameraReference.transform.forward * _currentDirection.y + cameraReference.transform.right * 
-            _currentDirection.x), position, false);
+        var forward = cameraReference.transform.forward;
+        forward.y = 0f;
+        forward.Normalize();
+
+        var movementVector = speed * Time.fixedDeltaTime * (forward * _currentDirection.y + cameraReference.transform.right * _currentDirection.x);
+        movementVector.y = 0f;
         
-        if (_isGrounded) position += _collisionLocal.CollideAndSlide(Vector3.down, position, true);
-        else position += _collisionLocal.CollideAndSlide(_fallingSpeed * Time.fixedDeltaTime * Vector3.down, position, true);
-        
+        position += _collisionLocal.CollideAndSlide(movementVector, position, false);
+
+        if (_isGrounded && _verticalSpeed < 0.1f) position += _collisionLocal.CollideAndSlide(Vector3.down * 0.05f, position, true);
+        else position += _collisionLocal.CollideAndSlide(_verticalSpeed * Time.fixedDeltaTime * Vector3.up, position, true);
+
         _rb.MovePosition(position);
-        //_rb.Move(position, transform.rotation);
-        
+
+        _jumpPressed = false;
     }
 
     private bool Sprint() => _isGrounded && InputManager.Sprint && (_breathManager.Breath >= sprintBreath);
+
+    private void TryJump()
+    {
+        if (!JumpAction) return;
+
+        _verticalSpeed = jumpSpeed;
+    }
 
     private float FindMovementSpeed()
     {
@@ -73,22 +93,14 @@ public class Movement : MonoBehaviour
         return movementSpeed;
     }
     
-    private bool jumpAction => _isGrounded && InputManager.JumpPressed;
+    private bool JumpAction => _isGrounded && _jumpPressed;
 
-    bool floatAction() => canFloat && !_isGrounded && InputManager.JumpHeld; 
+    bool FloatAction() => _rb.linearVelocity.y <= 0f && canFloat && !_isGrounded && InputManager.JumpHeld;
     
     private float FindGravity()
     {
-        if (floatAction())
-        {
-            return floatGravity;
-        }
-        else if (!floatAction() && !_isGrounded)
-        {
-            return jumpGravity;
-        }
-
-        return gravity; 
+        if (_isGrounded && !JumpAction) return groundGravity;
+        if (!_isGrounded && FloatAction()) return floatGravity;
+        return airGravity;
     }
-    
 }

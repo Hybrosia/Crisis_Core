@@ -580,9 +580,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e694d66855207240897a862b6a3c84d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundCheckDistance: 0.01
+  groundCheckDistance: 0.03
   maxBounces: 5
-  skinWidth: 0.015
+  skinWidth: 0.02
   maxSlopeAngle: 55
   whatIsTerrain:
     serializedVersion: 2
@@ -649,12 +649,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3ac8c801a4a57943a2f73d2bd8718b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: 9.81
+  airGravity: 9.81
   movementSpeed: 5
   jumpSpeed: 10
   runSpeed: 10
   moveSmoothTime: 0.3
   sprintBreath: 2
+  groundGravity: 10
+  floatGravity: 5
+  canFloat: 0
   cameraReference: {fileID: 910890033}
 --- !u!114 &685205610
 MonoBehaviour:
