@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SceneList
   m_EditorClassIdentifier: 
   Scenes:
-  - SampleScene.unity
+  - CollisionTest

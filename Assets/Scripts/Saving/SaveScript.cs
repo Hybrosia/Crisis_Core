@@ -7,14 +7,13 @@ public class SaveScript : MonoBehaviour
 {
     public static SaveData CurrentSave;
     public static SceneList SceneList;
+    [SerializeField] private SceneList sceneList;
 
     //Makes the game object this is on not be destroyed when a new scene loads.
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
-        SceneList = FindFirstObjectByType<SceneList>();
-        
-        LoadFromDisk();
+        SceneList = sceneList;
     }
     
     //If a save exists, loads it. If not, uses a blank save.
@@ -29,8 +28,12 @@ public class SaveScript : MonoBehaviour
         {
             CurrentSave = new SaveData();
         }
+
+        var c = CurrentSave.LevelIndex;
+
+        var s = SceneList.Scenes[c];
         
-        SceneManager.LoadScene(SceneList.Scenes[CurrentSave.LevelIndex]);
+        SceneManager.LoadScene(s);
         
         //TODO: Set the player's spirit to the saved value.
     }
