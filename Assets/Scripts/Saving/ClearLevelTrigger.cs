@@ -9,7 +9,7 @@ public class ClearLevelTrigger : MonoBehaviour
 
         SaveScript.CurrentSave.LevelIndex = SceneData.CurrentSceneData.levelIndex + 1;
         SaveScript.CurrentSave.CheckpointIndex = 0;
-        //TODO: SaveScript.CurrentSave.Spirit = Player.spirit; ? Er ikke helt sikker på om jeg skal lagre dette?
+        //TODO: SaveScript.CurrentSave.Spirit = Player.spirit;
         
         SaveScript.WriteSaveToDisk();
         SaveScript.LoadFromDisk();

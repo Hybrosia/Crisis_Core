@@ -33,4 +33,9 @@ public class BreathManager : MonoBehaviour
             timeSinceLastBreathUse = Time.time; 
         }
     }
+
+    public void ResetBreath()
+    {
+        Breath = MaximumBreath;
+    }
 }

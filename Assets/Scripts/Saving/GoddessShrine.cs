@@ -7,7 +7,10 @@ public class GoddessShrine : MonoBehaviour
     //Resets the player's health and breath and saves all other relevant data.
     public void Interact()
     {
-        //TODO: Reset the player's health and breath
+        var breathManager = FindFirstObjectByType<BreathManager>();
+        
+        if (breathManager) breathManager.ResetBreath();
+        //TODO: Reset the player's health
 
         SaveProgress();
     }
@@ -15,14 +18,15 @@ public class GoddessShrine : MonoBehaviour
     //Moves the player to a position in front of the shrine and makes them look away from the shrine.
     public void MovePlayerHere()
     {
-        var playerTransform = FindFirstObjectByType<Player>().transform;
+        var player = FindFirstObjectByType<Player>();
+        if (!player) return;
 
         var offset = transform.forward;
         offset.y = 0f;
         offset = offset.normalized * distanceFromShrineToSpawnPoint;
 
-        playerTransform.position = transform.position + offset;
-        playerTransform.rotation = Quaternion.Euler(0f, transform.rotation.y, 0f);
+        player.transform.position = transform.position + offset;
+        player.transform.rotation = Quaternion.Euler(0f, transform.rotation.y, 0f);
     }
     
     //Saves the player's progress.
