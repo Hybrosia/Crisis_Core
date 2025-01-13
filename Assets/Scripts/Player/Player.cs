@@ -8,7 +8,6 @@ public class Player : MonoBehaviour
    private void Start()
    {
       PlayerData.player = transform;
-    
    }
 
    private void Update()
