@@ -10,7 +10,6 @@ public class SpitterController : MonoBehaviour
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private float startJumpRange, endJumpRange, attackRate, jumpDistance;
     [SerializeField] private float[] jumpAngles;
-    [SerializeField] private string state;
     
     private SpitterState _state;
     private float _attackTimer;
@@ -30,10 +29,6 @@ public class SpitterController : MonoBehaviour
 
     private void Update()
     {
-        if (_state == SpitterState.Idle) state = "Idle";
-        else if (_state == SpitterState.Moving) state = "Moving";
-        else if (_state == SpitterState.Jumping) state = "Jumping";
-        
         var canSeePlayer = playerData.CanSeePlayerFromPoint(transform.position);
 
         if (canSeePlayer)
@@ -97,7 +92,6 @@ public class SpitterController : MonoBehaviour
         
         if (!canSeePlayer || Vector3.Distance(transform.position, playerData.PlayerPos) > endJumpRange)
         {
-            print("MOVE");
             SetMoving();
             return;
         }
