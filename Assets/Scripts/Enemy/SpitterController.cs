@@ -8,7 +8,7 @@ public class SpitterController : MonoBehaviour
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private float startJumpRange, endJumpRange, attackRate, jumpDistance;
+    [SerializeField] private float startJumpRange, endJumpRange, attackCooldown, jumpDistance;
     [SerializeField] private float[] jumpAngles;
     
     private SpitterState _state;
@@ -122,9 +122,9 @@ public class SpitterController : MonoBehaviour
         if (targetPosition == Vector3.zero) targetPosition = transform.position + Quaternion.AngleAxis(180f, Vector3.up) * directionTowardsPlayer;
         
         agent.SetDestination(targetPosition);
-        if (Time.time >= _attackTimer + attackRate)
+        if (Time.time >= _attackTimer)
         {
-            _attackTimer = Time.time;
+            _attackTimer = Time.time + attackCooldown;
             animator.StopPlayback();
             animator.Play("AttackJump");
         }
