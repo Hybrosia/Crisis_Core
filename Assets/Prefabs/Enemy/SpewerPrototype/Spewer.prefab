@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61c3e916861ebf24eb2e548d233df160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathSequenceObject: {fileID: 0}
+  deathSequenceObject: {fileID: 4026307300171048028, guid: f09036c122728784a9ca262b51857093, type: 3}
 --- !u!195 &3667032472396893926
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -208,10 +208,8 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: a1613681d07b144a0bcaed6341df5d6b, type: 2}
   animator: {fileID: 4113950443374376155}
   agent: {fileID: 3667032472396893926}
-  meleeRange: 1.5
-  closeRange: 4
-  startJumpRange: 10
-  endJumpRange: 15
+  startMeleeRange: 1.2
+  startCloseRange: 3.5
   jumpDistance: 6
   jumpChance: 0.5
   biteAttackCooldown: 1

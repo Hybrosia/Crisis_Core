@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61c3e916861ebf24eb2e548d233df160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathSequenceObject: {fileID: 0}
+  deathSequenceObject: {fileID: 7171948062546327858, guid: 13041b168a4018547805c0e0cc502920, type: 3}
 --- !u!195 &3515198736646900188
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -210,7 +210,7 @@ MonoBehaviour:
   agent: {fileID: 3515198736646900188}
   startJumpRange: 10
   endJumpRange: 15
-  attackRate: 1000
+  attackCooldown: 0
   jumpDistance: 6
   jumpAngles:
   - 60
@@ -219,7 +219,6 @@ MonoBehaviour:
   - 240
   - 270
   - 300
-  state: 
 --- !u!95 &7475553817104029396
 Animator:
   serializedVersion: 7

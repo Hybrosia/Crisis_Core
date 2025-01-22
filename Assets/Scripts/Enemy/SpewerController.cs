@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -8,7 +7,7 @@ public class SpewerController : MonoBehaviour
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private float meleeRange, closeRange, startJumpRange, endJumpRange, jumpDistance, jumpChance;
+    [SerializeField] private float startMeleeRange, startCloseRange, jumpDistance, jumpChance;
     [SerializeField] private float biteAttackCooldown, burpAttackCooldown, projectileAttackCooldown, chargeTime, staggerTime, staggerDamageThreshold;
     [SerializeField] private float maxHealth;
     [SerializeField] private float[] jumpAngles;
@@ -91,13 +90,8 @@ public class SpewerController : MonoBehaviour
     private void Moving(bool canSeePlayer)
     {
         if (!canSeePlayer && Vector3.Distance(transform.position, _lastKnownPlayerPosition) < 0.05f) SetIdle();
-        else if (canSeePlayer && Vector3.Distance(transform.position, playerData.PlayerPos) < meleeRange) SetBiting();
-        else if (canSeePlayer && IsPlayerAttacking())
-        {
-            if (Random.Range(0f, 1f) > jumpChance) SetJumping();
-            else SetCharging();
-        }
-        else if (canSeePlayer && Vector3.Distance(transform.position, playerData.PlayerPos) < closeRange) SetBurping();
+        else if (canSeePlayer && Vector3.Distance(transform.position, playerData.PlayerPos) < startMeleeRange) SetBiting();
+        else if (canSeePlayer && Vector3.Distance(transform.position, playerData.PlayerPos) < startCloseRange) SetBurping();
         else if (canSeePlayer)
         {
             agent.SetDestination(_lastKnownPlayerPosition);
@@ -243,12 +237,6 @@ public class SpewerController : MonoBehaviour
         SetMoving();
     }
 
-    private bool IsPlayerAttacking()
-    {
-        return true;
-        //TODO: Implement.
-    }
-
     public void OnGroundHit()
     {
         //Damage player if too close to impact. Trigger from animation event.
@@ -272,6 +260,12 @@ public class SpewerController : MonoBehaviour
     //Takes damage.
     public virtual void TakeDamage(float amount)
     {
+        if (_state is SpewerState.Idle or SpewerState.Moving && playerData.CanSeePlayerFromPoint(transform.position))
+        {
+            if (Random.Range(0f, 1f) > jumpChance) SetJumping();
+            else SetCharging();
+        }
+        
         //TODO: If hit with bubble rush, set _damageTakenWhileCharging to staggerDamageThreshold.
         if (_state == SpewerState.Charging) _damageTakenWhileCharging += amount;
         
