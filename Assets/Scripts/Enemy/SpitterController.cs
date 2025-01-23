@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -24,7 +23,7 @@ public class SpitterController : MonoBehaviour
 
     private void OnEnable()
     {
-        SetState(SpitterState.Idle);
+        SetIdle();
     }
 
     private void Update()
@@ -39,15 +38,6 @@ public class SpitterController : MonoBehaviour
         if (_state == SpitterState.Idle) Idle(canSeePlayer);
         else if (_state == SpitterState.Moving) Moving(canSeePlayer);
         else if (_state == SpitterState.Jumping) Jumping(canSeePlayer);
-    }
-
-    private void SetState(SpitterState newState)
-    {
-        _state = newState;
-        
-        if (_state == SpitterState.Idle) SetIdle();
-        if (_state == SpitterState.Moving) SetMoving();
-        if (_state == SpitterState.Jumping) SetJumping();
     }
 
     private void SetIdle()
@@ -73,10 +63,8 @@ public class SpitterController : MonoBehaviour
     {
         if (!canSeePlayer && Vector3.Distance(transform.position, _lastKnownPlayerPosition) < 0.05f) SetIdle();
         else if (Vector3.Distance(transform.position, playerData.PlayerPos) < startJumpRange) SetJumping();
-        else if (canSeePlayer)
-        {
-            agent.SetDestination(_lastKnownPlayerPosition);
-        }
+        
+        agent.SetDestination(_lastKnownPlayerPosition);
     }
     
     private void SetJumping()

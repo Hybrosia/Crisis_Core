@@ -32,7 +32,7 @@ public class SpewerController : MonoBehaviour
     private void OnEnable()
     {
         ResetHealth();
-        SetState(SpewerState.Idle);
+        SetIdle();
     }
 
     private void Update()
@@ -52,20 +52,6 @@ public class SpewerController : MonoBehaviour
         else if (_state == SpewerState.Biting) Biting(canSeePlayer);
         else if (_state == SpewerState.Burping) Burping(canSeePlayer);
         else if (_state == SpewerState.ProjectileAttacking) ProjectileAttacking(canSeePlayer);
-    }
-
-    private void SetState(SpewerState newState)
-    {
-        _state = newState;
-        
-        if (_state == SpewerState.Idle) SetIdle();
-        if (_state == SpewerState.Moving) SetMoving();
-        if (_state == SpewerState.Jumping) SetJumping();
-        if (_state == SpewerState.Charging) SetCharging();
-        if (_state == SpewerState.Staggered) SetStaggered();
-        if (_state == SpewerState.Biting) SetBiting();
-        if (_state == SpewerState.Burping) SetBurping();
-        if (_state == SpewerState.ProjectileAttacking) SetProjectileAttacking();
     }
 
     private void SetIdle()
@@ -198,7 +184,7 @@ public class SpewerController : MonoBehaviour
 
     private void Burping(bool canSeePlayer)
     {
-        //TODO: Add a collider/trigger that destroys all regular bubbles.
+        //TODO: Add a collider/trigger that destroys all regular bubbles and pushes the player away.
         
         if (Time.time < _attackTimer) return;
         
@@ -258,7 +244,7 @@ public class SpewerController : MonoBehaviour
     }
 
     //Takes damage.
-    public virtual void TakeDamage(float amount)
+    public void TakeDamage(float amount)
     {
         if (_state is SpewerState.Idle or SpewerState.Moving && playerData.CanSeePlayerFromPoint(transform.position))
         {
