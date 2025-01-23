@@ -6,8 +6,11 @@ public class EnemyDeathSpawnObject : EnemyDeathBase
     
     public override void OnDeath()
     {
-        //TODO: Return to object pool. For now:
-        Destroy(gameObject);
-        Instantiate(deathSequenceObject, transform.position, transform.rotation, transform.parent);
+        var instance = ObjectPoolController.SpawnFromPrefab(deathSequenceObject);
+        instance.transform.parent = transform.parent;
+        instance.transform.position = transform.position;
+        instance.transform.rotation = transform.rotation;
+
+        ObjectPoolController.DeactivateInstance(gameObject);
     }
 }

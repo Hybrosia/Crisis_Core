@@ -260,6 +260,6 @@ public class SpewerController : MonoBehaviour
         if (_currentHealth > 0f) return;
         
         if (TryGetComponent<EnemyDeathBase>(out var deathScript)) deathScript.OnDeath();
-        else Destroy(gameObject);
+        else ObjectPoolController.DeactivateInstance(gameObject);
     }
 }

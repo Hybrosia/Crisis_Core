@@ -8,6 +8,7 @@ public class GruntController : MonoBehaviour
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
+    [SerializeField] private GameObject gruntPrefab, clusterPrefab;
     [SerializeField] private float meleeRange, closeRange, viewDistance, joinClusterRadius, damage;
     [SerializeField] private float knockbackInitialSpeed, stunTime, angryTime, knockbackSlowdownPerSecond, attackCooldown;
     [SerializeField] private float maxHealth;
@@ -60,7 +61,7 @@ public class GruntController : MonoBehaviour
     private void SetSearching()
     {
         _state = GruntState.Searching;
-        animator.Play("Search");
+        animator.Play("Move");
         agent.isStopped = false;
         agent.speed = _standardSpeed;
 
@@ -180,8 +181,8 @@ public class GruntController : MonoBehaviour
     //Returns the closest visible grunt.
     private GruntController FindClosestVisibleGrunt()
     {
-        var grunts = FindObjectsByType<GruntController>(FindObjectsSortMode.None); //TODO: Replace with a reference to the active grunts on the Grunt Object Pool.
-        var validGrunts = grunts
+        var grunts = ObjectPoolController.GetActiveObjects(gruntPrefab);
+        var validGrunts = grunts.Select(grunt => grunt.GetComponent<GruntController>())
             .Where(grunt => Vector3.Distance(transform.position, grunt.transform.position) < viewDistance)
             .Where(grunt =>
                 Physics.Raycast(transform.position, Vector3.Normalize(grunt.transform.position - transform.position),
@@ -196,15 +197,19 @@ public class GruntController : MonoBehaviour
 
     private void CreateCluster(GruntController otherGrunt)
     {
-        //TODO: Implement
-        //Create a new cluster. Position it in the average of this and the other grunt's position.
-        //Put this and the other grunt in the cluster.
+        PutInCluster(ObjectPoolController.SpawnFromPrefab(clusterPrefab).GetComponent<GruntClusterController>());
+        
+        _cluster.transform.position = (transform.position + otherGrunt.transform.position) / 2f;
+        _cluster.transform.rotation = Quaternion.identity;
+        
+        otherGrunt.PutInCluster(_cluster);
     }
 
     public void PutInCluster(GruntClusterController cluster)
     {
         _cluster = cluster;
         cluster.AddGrunt(this);
+        SetSearching();
     }
 
     public void RemoveFromCluster()
@@ -243,6 +248,6 @@ public class GruntController : MonoBehaviour
         if (_currentHealth > 0f) return;
         
         if (TryGetComponent<EnemyDeathBase>(out var deathScript)) deathScript.OnDeath();
-        else Destroy(gameObject);
+        else ObjectPoolController.DeactivateInstance(gameObject);
     }
 }

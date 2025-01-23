@@ -57,7 +57,8 @@ public class GruntClusterController : MonoBehaviour
             {
                 grunt.StartAttack();
             }
-        //TODO: Search for another group or more grunts.
+        //TODO: Search for another cluster or more grunts, i.e., target the closest visible grunt. If in range of a cluster, merge the clusters into one.
+        //If in range of a single grunt, the grunt should join the group on their own.
     }
 
     //Makes all grunts attack at the same time.
@@ -85,7 +86,7 @@ public class GruntClusterController : MonoBehaviour
         
         _grunts.Remove(grunt);
         
-        if (_grunts.Count == 0) Destroy(gameObject);
+        if (_grunts.Count == 0) ObjectPoolController.DeactivateInstance(gameObject);
     }
     
     //Takes damage.
@@ -101,6 +102,6 @@ public class GruntClusterController : MonoBehaviour
         
         foreach (var grunt in _grunts) grunt.ExplodeCluster(centerOfCluster);
         
-        Destroy(gameObject);
+        ObjectPoolController.DeactivateInstance(gameObject);
     }
 }
