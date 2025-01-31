@@ -72,10 +72,12 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: a1613681d07b144a0bcaed6341df5d6b, type: 2}
   animator: {fileID: 3443446225145940932}
   agent: {fileID: 2543458437996301214}
+  clusterPrefab: {fileID: 6818586410695207716, guid: 15ffe423a92752348860c292b39c75af, type: 3}
   meleeRange: 1.2
   closeRange: 3.5
   viewDistance: 12
   joinClusterRadius: 3
+  avoidPlayerDistance: 5
   damage: 10
   knockbackInitialSpeed: 2
   stunTime: 1
@@ -83,9 +85,14 @@ MonoBehaviour:
   knockbackSlowdownPerSecond: 2
   attackCooldown: 0.8
   maxHealth: 30
+  terrain:
+    serializedVersion: 2
+    m_Bits: 0
   lastSawPlayerTime: 0
   attackTimer: 0
   lastKnownPlayerPosition: {x: 0, y: 0, z: 0}
+  state: 0
+  cluster: {fileID: 0}
 --- !u!95 &3443446225145940932
 Animator:
   serializedVersion: 7

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,39 +9,49 @@ public class GruntController : MonoBehaviour
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private GameObject gruntPrefab, clusterPrefab;
-    [SerializeField] private float meleeRange, closeRange, viewDistance, joinClusterRadius, damage;
+    [SerializeField] private GameObject clusterPrefab;
+    [SerializeField] private float meleeRange, closeRange, viewDistance, joinClusterRadius, avoidPlayerDistance, damage;
     [SerializeField] private float knockbackInitialSpeed, stunTime, angryTime, knockbackSlowdownPerSecond, attackCooldown;
     [SerializeField] private float maxHealth;
+    [SerializeField] private LayerMask terrain;
 
     [HideInInspector] public float lastSawPlayerTime, attackTimer;
     [HideInInspector] public Vector3 lastKnownPlayerPosition;
-    
+    [HideInInspector] public GruntState state;
+    [HideInInspector] public GruntClusterController cluster;
+
     private float _currentHealth;
     private float _standardSpeed;
-    private GruntState _state;
     private float _stunTimer, _angryTimer;
-    private GruntClusterController _cluster;
+    private NavigationPoint _lastCheckedPoint;
+    private List<NavigationPoint> _currentPath;
     
-    private enum GruntState
+    public static List<GruntController> ActiveGrunts;
+
+    public enum GruntState
     {
         Searching,
         Afraid,
         Stunned,
         Angry
     }
-
+    
+    
     private void OnEnable()
     {
+        ActiveGrunts.Add(this);
         SetSearching();
         _standardSpeed = agent.speed;
     }
+    
+    private void OnDisable() => ActiveGrunts.Remove(this);
+
 
     private void Update()
     {
-        if (_cluster)
+        if (cluster)
         {
-            agent.SetDestination(_cluster.transform.position);
+            agent.SetDestination(cluster.transform.position);
             return;
         }
         
@@ -52,15 +63,15 @@ public class GruntController : MonoBehaviour
             lastKnownPlayerPosition = playerData.PlayerPos;
         }
         
-        if (_state == GruntState.Searching) Searching(canSeePlayer);
-        else if (_state == GruntState.Afraid) Afraid(canSeePlayer);
-        else if (_state == GruntState.Stunned) Stunned(canSeePlayer);
-        else if (_state == GruntState.Angry) Angry(canSeePlayer);
+        if (state == GruntState.Searching) Searching(canSeePlayer);
+        else if (state == GruntState.Afraid) Afraid(canSeePlayer);
+        else if (state == GruntState.Stunned) Stunned(canSeePlayer);
+        else if (state == GruntState.Angry) Angry(canSeePlayer);
     }
 
     private void SetSearching()
     {
-        _state = GruntState.Searching;
+        state = GruntState.Searching;
         animator.Play("Move");
         agent.isStopped = false;
         agent.speed = _standardSpeed;
@@ -75,10 +86,10 @@ public class GruntController : MonoBehaviour
         if (closestVisibleGrunt)
         {
             if (Vector3.Distance(transform.position, closestVisibleGrunt.transform.position) <= joinClusterRadius  
-                && closestVisibleGrunt._state is GruntState.Searching or GruntState.Afraid)
+                && closestVisibleGrunt.state is GruntState.Searching or GruntState.Afraid)
             {
                 //Create or join a cluster.
-                if (closestVisibleGrunt._cluster) closestVisibleGrunt._cluster.AddGrunt(this);
+                if (closestVisibleGrunt.cluster) closestVisibleGrunt.cluster.AddGrunt(this);
                 else CreateCluster(closestVisibleGrunt);
             }
             else agent.SetDestination(closestVisibleGrunt.transform.position);
@@ -89,12 +100,13 @@ public class GruntController : MonoBehaviour
 
     private void SetAfraid()
     {
-        _state = GruntState.Afraid;
+        state = GruntState.Afraid;
         animator.Play("Flee");
         agent.isStopped = false;
         agent.speed = _standardSpeed;
 
-        //TODO: Find the closest hiding spot or a target away from the player.
+        _currentPath = GetPathAwayFromPlayer();
+        agent.SetDestination(_currentPath[0].transform.position);
     }
 
     private void Afraid(bool canSeePlayer)
@@ -105,14 +117,14 @@ public class GruntController : MonoBehaviour
         else if (!canSeePlayer && Vector3.Distance(transform.position, lastKnownPlayerPosition) > viewDistance) SetSearching();
         else if (canSeePlayer)
         {
-            //TODO: Find the closest hiding spot or a target away from the player.
-            //agent.SetDestination(_lastKnownPlayerPosition);
+            _currentPath = GetPathAwayFromPlayer();
+            agent.SetDestination(_currentPath[0].transform.position);
         }
     }
     
     private void SetStunned(Vector3 knockBackDirection)
     {
-        _state = GruntState.Stunned;
+        state = GruntState.Stunned;
         animator.Play("Stunned");
         agent.isStopped = false;
         
@@ -134,7 +146,7 @@ public class GruntController : MonoBehaviour
     
     private void SetAngry()
     {
-        _state = GruntState.Angry;
+        state = GruntState.Angry;
         animator.Play("Angry");
         agent.isStopped = false;
         agent.speed = _standardSpeed;
@@ -160,7 +172,7 @@ public class GruntController : MonoBehaviour
 
     public void DoMeleeAttack()
     {
-        if (_cluster && _cluster.IsProperCluster()) return;
+        if (cluster && cluster.IsProperCluster()) return;
         //Damage the player. Trigger from AnimationEvent.
     }
 
@@ -172,21 +184,39 @@ public class GruntController : MonoBehaviour
         attackTimer = Time.time + attackCooldown;
     }
 
-    private Vector3 FindNextSearchTarget()
+    public Vector3 FindNextSearchTarget()
     {
-        return Vector3.zero;
-        //TODO: Find a suitable target to move towards. Probably pick a random of the closest navigation nodes, prioritizing those that was not just checked.
+        var closestNavigationPoint = NavigationPoint.FindPointClosestToPosition(transform.position);
+        
+        var newPoints = closestNavigationPoint.pointsWithCost.Keys.ToList();
+        if (_lastCheckedPoint) newPoints.Remove(_lastCheckedPoint);
+        if (newPoints.Count != 0) return newPoints[Random.Range(0, newPoints.Count)].transform.position;
+        if (_lastCheckedPoint) return _lastCheckedPoint.transform.position;
+        return closestNavigationPoint.transform.position;
+    }
+
+    private List<NavigationPoint> GetPathAwayFromPlayer()
+    {
+        var vectorFromPlayerToGrunt = transform.position - playerData.PlayerPos;
+
+        var closestNavigationPoint = NavigationPoint.FindPointClosestToPosition(transform.position);
+        var furthestNavigationPoint = NavigationPoint.ActiveNavigationPoints
+            .Where(point => Vector3.Dot(vectorFromPlayerToGrunt, point.transform.position - transform.position) > 0f)
+            .Aggregate((furthest, next) => 
+                Vector3.Distance(transform.position, next.transform.position) >
+                Vector3.Distance(transform.position, furthest.transform.position) ? next : furthest);
+
+        return closestNavigationPoint.FindShortestPathToPoint(furthestNavigationPoint);
     }
 
     //Returns the closest visible grunt.
-    private GruntController FindClosestVisibleGrunt()
+    public GruntController FindClosestVisibleGrunt()
     {
-        var grunts = ObjectPoolController.GetActiveObjects(gruntPrefab);
-        var validGrunts = grunts.Select(grunt => grunt.GetComponent<GruntController>())
+        var validGrunts = ActiveGrunts
             .Where(grunt => Vector3.Distance(transform.position, grunt.transform.position) < viewDistance)
             .Where(grunt =>
-                Physics.Raycast(transform.position, Vector3.Normalize(grunt.transform.position - transform.position),
-                    out var hitInfo) && hitInfo.transform == grunt.transform);//TODO: Switch to raycasting only against terrain.
+                !Physics.Raycast(transform.position, (grunt.transform.position - transform.position).normalized,
+                    out var hitInfo, terrain));
         
         if (validGrunts.Any())
             return validGrunts.Aggregate((closest, next) =>
@@ -199,25 +229,25 @@ public class GruntController : MonoBehaviour
     {
         PutInCluster(ObjectPoolController.SpawnFromPrefab(clusterPrefab).GetComponent<GruntClusterController>());
         
-        _cluster.transform.position = (transform.position + otherGrunt.transform.position) / 2f;
-        _cluster.transform.rotation = Quaternion.identity;
+        cluster.transform.position = (transform.position + otherGrunt.transform.position) / 2f;
+        cluster.transform.rotation = Quaternion.identity;
         
-        otherGrunt.PutInCluster(_cluster);
+        otherGrunt.PutInCluster(cluster);
     }
 
     public void PutInCluster(GruntClusterController cluster)
     {
-        _cluster = cluster;
+        this.cluster = cluster;
         cluster.AddGrunt(this);
         SetSearching();
     }
 
     public void RemoveFromCluster()
     {
-        if (!_cluster) return;
+        if (!cluster) return;
         
-        _cluster.RemoveGrunt(this);
-        _cluster = null;
+        cluster.RemoveGrunt(this);
+        cluster = null;
     }
 
     public void ExplodeCluster(Vector3 centerOfCluster)
@@ -237,9 +267,9 @@ public class GruntController : MonoBehaviour
     //Takes damage.
     public void TakeDamage(float amount)
     {
-        if (_cluster && _cluster.IsProperCluster())
+        if (cluster && cluster.IsProperCluster())
         {
-            _cluster.TakeDamage(amount);
+            cluster.TakeDamage(amount);
             return;
         }
 

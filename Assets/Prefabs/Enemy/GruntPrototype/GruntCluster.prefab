@@ -76,6 +76,7 @@ MonoBehaviour:
   damagePerGrunt: 10
   meleeRange: 1.2
   maxGruntDistanceWhileMoving: 3
+  joinClusterRadius: 3
   numberRequiredToCluster: 5
 --- !u!1 &9115225688220902471
 GameObject:

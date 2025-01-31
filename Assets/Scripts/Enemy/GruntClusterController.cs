@@ -8,7 +8,7 @@ public class GruntClusterController : MonoBehaviour
 {
     [SerializeField] private PlayerData playerData;
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private float baseHealth, healthPerGrunt, baseDamage, damagePerGrunt, meleeRange, maxGruntDistanceWhileMoving;
+    [SerializeField] private float baseHealth, healthPerGrunt, baseDamage, damagePerGrunt, meleeRange, maxGruntDistanceWhileMoving, joinClusterRadius;
     [SerializeField] private int numberRequiredToCluster;
     
     private float _currentDamage, _standardSpeed;
@@ -40,8 +40,11 @@ public class GruntClusterController : MonoBehaviour
 
     private void UpdateAsCluster(bool canSeePlayer)
     {
-        if (!canSeePlayer 
-            && _grunts.Any(grunt => Vector3.Distance(grunt.transform.position, _lastKnownPlayerPosition) < 0.05f)) ;//TODO: Search
+        if (!canSeePlayer
+            && _grunts.Any(grunt => Vector3.Distance(grunt.transform.position, _lastKnownPlayerPosition) < 0.05f))
+        {
+            agent.SetDestination(_grunts[0].FindNextSearchTarget());
+        }
         else if (canSeePlayer 
                  && _grunts.Any(grunt => Vector3.Distance(grunt.transform.position, playerData.PlayerPos) < meleeRange) 
                  && _grunts.All(grunt => Time.time >= grunt.attackTimer)) AttackAsCluster();
@@ -57,8 +60,26 @@ public class GruntClusterController : MonoBehaviour
             {
                 grunt.StartAttack();
             }
-        //TODO: Search for another cluster or more grunts, i.e., target the closest visible grunt. If in range of a cluster, merge the clusters into one.
-        //If in range of a single grunt, the grunt should join the group on their own.
+        
+        GruntController currentClosestGrunt = null;
+        var currentSmallestDistance = float.PositiveInfinity;
+        
+        foreach (var grunt in _grunts)
+        {
+            var potentialClosestGrunt = grunt.FindClosestVisibleGrunt();
+            if (potentialClosestGrunt &&
+                Vector3.Distance(potentialClosestGrunt.transform.position, grunt.transform.position) < currentSmallestDistance) 
+                currentClosestGrunt = potentialClosestGrunt;
+        }
+
+        if (currentClosestGrunt && currentClosestGrunt.cluster &&
+            Vector3.Distance(transform.position, currentClosestGrunt.transform.position) <= joinClusterRadius &&
+            currentClosestGrunt.state is GruntController.GruntState.Searching or GruntController.GruntState.Afraid)
+        {
+            MergeClusters(currentClosestGrunt.cluster);
+        }
+        else if (currentClosestGrunt) agent.SetDestination(currentClosestGrunt.transform.position);
+        else agent.SetDestination(_grunts[0].FindNextSearchTarget());
     }
 
     //Makes all grunts attack at the same time.
@@ -103,5 +124,13 @@ public class GruntClusterController : MonoBehaviour
         foreach (var grunt in _grunts) grunt.ExplodeCluster(centerOfCluster);
         
         ObjectPoolController.DeactivateInstance(gameObject);
+    }
+
+    //Registers all the grunts in the other cluster to this cluster and removes the other cluster.
+    private void MergeClusters(GruntClusterController otherCluster)
+    {
+        otherCluster._grunts.ForEach(grunt => grunt.PutInCluster(this));
+        
+        ObjectPoolController.DeactivateInstance(otherCluster.gameObject);
     }
 }
