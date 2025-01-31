@@ -6,7 +6,7 @@ public class EnemyHealthManager : MonoBehaviour
     
     protected float CurrentHealth;
 
-    protected virtual void Awake()
+    protected virtual void OnEnable()
     {
         ResetHealth();
     }
