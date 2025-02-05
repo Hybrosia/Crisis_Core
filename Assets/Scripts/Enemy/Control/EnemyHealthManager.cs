@@ -24,7 +24,7 @@ public class EnemyHealthManager : MonoBehaviour
         if (CurrentHealth > 0f) return;
         
         if (TryGetComponent<EnemyDeathBase>(out var deathScript)) deathScript.OnDeath();
-        else Destroy(gameObject);
+        else ObjectPoolController.DeactivateInstance(gameObject);
     }
     
     /*public virtual void TakeDamage(WeaponStats weaponStats, bool isSecondary)
