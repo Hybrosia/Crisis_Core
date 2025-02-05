@@ -14,7 +14,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float floatGravity;
     [SerializeField] private bool canFloat; 
 
-    private Collision _collisionLocal; 
+    private PlayerCollision _collisionLocal; 
     private bool _isGrounded;
     private float _verticalSpeed;
 
@@ -29,7 +29,7 @@ public class Movement : MonoBehaviour
 
     private void Start()
     {
-        _collisionLocal = GetComponent<Collision>();
+        _collisionLocal = GetComponent<PlayerCollision>();
         _rb = GetComponent<Rigidbody>();
         _breathManager = GetComponent<BreathManager>();
     }

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CapsuleCollider)), RequireComponent(typeof(Rigidbody))]
-public class Collision : MonoBehaviour
+public class PlayerCollision : MonoBehaviour
 {
     [SerializeField] private float groundCheckDistance = 0.01f;
     [SerializeField] private int maxBounces = 5;
