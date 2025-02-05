@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 5406377610637202894}
   - component: {fileID: 2160807692751087454}
   - component: {fileID: 2005329717246882769}
-  - component: {fileID: 3915137322277469157}
+  - component: {fileID: -7078670126791759430}
   - component: {fileID: 338758289354158050}
   m_Layer: 0
   m_Name: Rusher
@@ -193,7 +193,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &3915137322277469157
+--- !u!114 &-7078670126791759430
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -202,23 +202,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 9010444789616425831}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adde055cccbe88b4785a127cfd3675a1, type: 3}
+  m_Script: {fileID: 11500000, guid: 07d6f18dbf655b548a518c8b811001d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: a1613681d07b144a0bcaed6341df5d6b, type: 2}
   animator: {fileID: 338758289354158050}
   agent: {fileID: 2005329717246882769}
-  startJumpRange: 10
-  endJumpRange: 15
-  attackCooldown: 0
-  jumpDistance: 6
-  jumpAngles:
-  - 60
-  - 90
-  - 120
-  - 240
-  - 270
-  - 300
+  startMeleeRange: 1
+  startChargeRange: 10
+  maxChargeDistance: 20
+  avoidPlayerRadius: 5
+  colliderRadius: 0.5
+  rushSpeed: 4
+  chargeAttackCooldown: 1
+  meleeAttackCooldown: 1
+  chargeTime: 4
+  staggerTime: 5
+  maxHealth: 100
 --- !u!95 &338758289354158050
 Animator:
   serializedVersion: 7
