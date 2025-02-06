@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 244544284460995778}
   - component: {fileID: 4658362856066988600}
   - component: {fileID: 262075498865545397}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ghoul
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 6
+  m_Speed: 2
   m_Acceleration: 1000
   avoidancePriority: 50
   m_AngularSpeed: 1000
@@ -103,6 +103,7 @@ MonoBehaviour:
   startMeleeRange: 1
   attackCooldown: 3
   damage: 50
+  stateString: 
 --- !u!95 &262075498865545397
 Animator:
   serializedVersion: 7
@@ -137,7 +138,7 @@ GameObject:
   - component: {fileID: 1853125870980129789}
   - component: {fileID: 6029165394262283620}
   - component: {fileID: 6162759958222258241}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
