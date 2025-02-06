@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 47259058832699183}
   - component: {fileID: 2555816780541687525}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GruntDeathSequence
   m_TagString: Untagged
   m_Icon: {fileID: 0}

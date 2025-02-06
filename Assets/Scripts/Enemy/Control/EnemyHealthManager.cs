@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyHealthManager : MonoBehaviour
+public class EnemyHealthManager : MonoBehaviour, IEnemyHealthManager
 {
     [SerializeField] protected float maxHealth;
     
@@ -17,7 +17,7 @@ public class EnemyHealthManager : MonoBehaviour
     }
 
     //Takes damage.
-    public virtual void TakeDamage(float amount)
+    public void TakeDamage(float amount)
     {
         CurrentHealth -= amount;
         
@@ -26,16 +26,9 @@ public class EnemyHealthManager : MonoBehaviour
         if (TryGetComponent<EnemyDeathBase>(out var deathScript)) deathScript.OnDeath();
         else ObjectPoolController.DeactivateInstance(gameObject);
     }
-    
-    /*public virtual void TakeDamage(WeaponStats weaponStats, bool isSecondary)
-    {
-        CurrentHealth -= isSecondary ? weaponStats.secondaryDamage : weaponStats.weaponDamage;
-        
-        if (CurrentHealth <= 0f)
-        {
-            if (corpsePrefab) Instantiate(corpsePrefab, transform.position, transform.rotation, transform.parent);
-            Destroy(gameObject);
-            return;
-        }
-    }*/
+}
+
+public interface IEnemyHealthManager
+{
+    public void TakeDamage(float amount);
 }

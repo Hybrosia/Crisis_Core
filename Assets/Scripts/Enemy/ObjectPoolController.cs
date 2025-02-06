@@ -3,8 +3,8 @@ using UnityEngine;
 
 public static class ObjectPoolController
 {
-    private static Dictionary<GameObject, List<GameObject>> inactiveObjects;
-    private static Dictionary<GameObject, List<GameObject>> activeObjects;
+    private static Dictionary<GameObject, List<GameObject>> inactiveObjects = new Dictionary<GameObject, List<GameObject>>();
+    private static Dictionary<GameObject, List<GameObject>> activeObjects = new Dictionary<GameObject, List<GameObject>>();
 
     //Activates an inactive object from the object pool or instantiates a new one.
     public static GameObject SpawnFromPrefab(GameObject prefab)

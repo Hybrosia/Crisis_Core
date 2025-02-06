@@ -15,4 +15,4 @@ MonoBehaviour:
   fireRate: 60
   bulletSpeed: 100
   breathUsage: 5
-  weaponDamage: 10
+  weaponDamage: 50

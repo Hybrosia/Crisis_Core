@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BulletScript : MonoBehaviour
 {
-    [SerializeField] private WeaponStats _weaponStats; 
+    public WeaponStats weaponStats;
     
     private Rigidbody _rigidbody;
 
@@ -11,7 +11,7 @@ public class BulletScript : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
     }
-    private void OnTriggerEnter(Collider col)
+    private void OnTriggerEnter(Collider other)
     {
         /*if (col.TryGetComponent(out EnemyHealthManager enemy))
         {
@@ -28,6 +28,11 @@ public class BulletScript : MonoBehaviour
     {
         CurrentHealth -= weaponStats.weaponDamage;
         */
+        Destroy(gameObject);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
         Destroy(gameObject);
     }
 }

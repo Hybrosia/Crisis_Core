@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4695434640168565008}
   - component: {fileID: 6652701495740835430}
   - component: {fileID: 5130762304242030574}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GruntCluster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 2896944773536601265}
   - component: {fileID: 1619256753886448881}
   - component: {fileID: 3976260172859309703}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

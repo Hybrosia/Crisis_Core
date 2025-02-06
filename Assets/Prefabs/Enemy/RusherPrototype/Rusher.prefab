@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 656859074291549613}
   - component: {fileID: 9151587959446309786}
   - component: {fileID: 7601355561285930676}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 2005329717246882769}
   - component: {fileID: -7078670126791759430}
   - component: {fileID: 338758289354158050}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Rusher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61c3e916861ebf24eb2e548d233df160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathSequenceObject: {fileID: 7171948062546327858, guid: 13041b168a4018547805c0e0cc502920, type: 3}
+  deathSequenceObject: {fileID: 5163938933491829249, guid: 0eb1764de8a598143abbc630bea7aeec, type: 3}
 --- !u!195 &2005329717246882769
 NavMeshAgent:
   m_ObjectHideFlags: 0
