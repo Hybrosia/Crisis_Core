@@ -11,7 +11,11 @@ public class InputManager : MonoBehaviour
     public static bool JumpReleased { get; private set; }
     public static bool JumpHeld { get; private set; } // This is used for Gliding
                                                       // (When Jump is held while in air you start gliding)
-    
+
+    public static bool PreviousPressed { get; private set; }
+    public static bool NextPressed { get; private set; }
+    public static bool FirePressed { get; private set; }
+
 
     private void Update()
     {
@@ -21,6 +25,9 @@ public class InputManager : MonoBehaviour
         JumpPressed = _inputSystem.Player.Jump.WasPressedThisFrame();
         JumpReleased = _inputSystem.Player.Jump.WasReleasedThisFrame();
         JumpHeld = _inputSystem.Player.Jump.IsPressed();
+        PreviousPressed = _inputSystem.Player.Previous.WasPressedThisFrame();
+        NextPressed = _inputSystem.Player.Next.WasPressedThisFrame();
+        FirePressed = _inputSystem.Player.Fire.WasPressedThisFrame();
     }
 
     private void Awake()

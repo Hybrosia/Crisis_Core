@@ -12,7 +12,12 @@ public class Movement : MonoBehaviour
     [SerializeField] private float sprintBreath = 50;
     [SerializeField] private float groundGravity;
     [SerializeField] private float floatGravity;
-    [SerializeField] private bool canFloat; 
+    [SerializeField] private float floatTimer = 2f;
+    [SerializeField] private float floatCooldown = 15f;
+
+    private float _timeSinceFloat;
+    private float _currentFloat = 0;
+    private bool _floatInit = false; 
 
     private PlayerCollision _collisionLocal; 
     private bool _isGrounded;
@@ -32,15 +37,17 @@ public class Movement : MonoBehaviour
         _collisionLocal = GetComponent<PlayerCollision>();
         _rb = GetComponent<Rigidbody>();
         _breathManager = GetComponent<BreathManager>();
+        _timeSinceFloat = floatCooldown;
     }
 
     private void Update()
     {
         if (!_jumpPressed && InputManager.JumpPressed) _jumpPressed = true;
+        _timeSinceFloat += Time.deltaTime;
     }
 
     private void FixedUpdate()
-    {
+    {   
         _currentDirection = Vector2.SmoothDamp(_currentDirection, InputManager.Move,
             ref _currentDirectionVelocity, moveSmoothTime);
         
@@ -70,6 +77,8 @@ public class Movement : MonoBehaviour
         _rb.MovePosition(position);
 
         _jumpPressed = false;
+
+        ResetFloatTimer();
     }
 
     private bool Sprint() => _isGrounded && InputManager.Sprint && (_breathManager.Breath >= sprintBreath);
@@ -94,13 +103,40 @@ public class Movement : MonoBehaviour
     }
     
     private bool JumpAction => _isGrounded && _jumpPressed;
+    
+    private bool CanFloat => _timeSinceFloat >= floatCooldown; 
+    bool FloatAction() => _rb.linearVelocity.y <= 0f && CanFloat && !_isGrounded && InputManager.JumpHeld;
 
-    bool FloatAction() => _rb.linearVelocity.y <= 0f && canFloat && !_isGrounded && InputManager.JumpHeld;
+    private void ResetFloatTimer()
+    {
+        if (FloatAction())
+        {
+            _floatInit = true;
+            _currentFloat += Time.deltaTime;
+            if (_currentFloat >= floatTimer)
+            {
+                _timeSinceFloat = 0;
+                _floatInit = false; 
+            }
+        }
+        else if (_floatInit && !FloatAction())
+        {
+            _floatInit = false;
+            _timeSinceFloat = 0;
+            _currentFloat = 0; 
+        }
+        else
+        {
+            _currentFloat = 0;
+            _floatInit = false; 
+        }
+    }
     
     private float FindGravity()
     {
         if (_isGrounded && !JumpAction) return groundGravity;
         if (!_isGrounded && FloatAction()) return floatGravity;
         return airGravity;
+        
     }
 }
