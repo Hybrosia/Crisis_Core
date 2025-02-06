@@ -1,0 +1,33 @@
+using System;
+using UnityEngine;
+
+public class BulletScript : MonoBehaviour
+{
+    [SerializeField] private WeaponStats _weaponStats; 
+    
+    private Rigidbody _rigidbody;
+
+    private void Start()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+    }
+    private void OnTriggerEnter(Collider col)
+    {
+        /*if (col.TryGetComponent(out EnemyHealthManager enemy))
+        {
+            enemy.TakeDamage(_weaponStats, false);
+            if (col.TryGetComponent(out EnemyActivation activation)) activation.Activate();
+            if (col.TryGetComponent(out EnemyMovementHandler movement))
+            {
+                movement.StartKnockback(_rigidBody.velocity.normalized * _weaponStats.knockbackSpeed);
+            }
+        }*/
+        
+        /*enemy.takeDamage settes opp som følgende: 
+        public virtual void TakeDamage(WeaponStats weaponStats)
+    {
+        CurrentHealth -= weaponStats.weaponDamage;
+        */
+        Destroy(gameObject);
+    }
+}

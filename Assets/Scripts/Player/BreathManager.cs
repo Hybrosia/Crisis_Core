@@ -21,6 +21,7 @@ public class BreathManager : MonoBehaviour
         }
         
         RestoreBreath();
+        print("my current breath is " + Breath);
     }
 
     private bool BreathRestoration() => Breath != MaximumBreath && Time.time > (timeNeededForBreathRestoration + timeSinceLastBreathUse);
