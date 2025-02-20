@@ -23,7 +23,6 @@ public class PlayerHealthManager : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        print("DAMAGE: " + amount);
         _currentHealth -= amount;
         UpdateHealthUI();
         

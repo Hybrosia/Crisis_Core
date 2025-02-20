@@ -12,7 +12,6 @@ public class EnemyProjectile : MonoBehaviour
     public void Fire()
     {
         var directionTowardsPlayer = (playerData.PlayerPos - transform.position).normalized;
-        print(directionTowardsPlayer);
         rb.linearVelocity = Quaternion.Euler(fireAngle, 0f, 0f) * directionTowardsPlayer * initialSpeed;
     }
 
