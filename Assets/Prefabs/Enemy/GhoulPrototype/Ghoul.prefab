@@ -103,7 +103,6 @@ MonoBehaviour:
   startMeleeRange: 1
   attackCooldown: 3
   damage: 50
-  stateString: 
 --- !u!95 &262075498865545397
 Animator:
   serializedVersion: 7

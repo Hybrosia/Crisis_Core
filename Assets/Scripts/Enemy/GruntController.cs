@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,7 +28,7 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
     private NavigationPoint _lastCheckedPoint;
     private List<NavigationPoint> _currentPath;
     
-    public static List<GruntController> ActiveGrunts;
+    public static List<GruntController> ActiveGrunts = new List<GruntController>();
 
     public enum GruntState
     {
@@ -40,13 +42,18 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
     private void OnEnable()
     {
         ActiveGrunts.Add(this);
-        SetSearching();
         _standardSpeed = agent.speed;
+        StartCoroutine(Start());
     }
     
     private void OnDisable() => ActiveGrunts.Remove(this);
 
-
+    private IEnumerator Start()
+    {
+        yield return null;
+        SetSearching();
+    }
+    
     private void Update()
     {
         if (cluster)
@@ -227,7 +234,9 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
 
     private void CreateCluster(GruntController otherGrunt)
     {
-        PutInCluster(ObjectPoolController.SpawnFromPrefab(clusterPrefab).GetComponent<GruntClusterController>());
+        var test = ObjectPoolController.SpawnFromPrefab(clusterPrefab);
+        var test2 = test.GetComponent<GruntClusterController>();
+        PutInCluster(test2);
         
         cluster.transform.position = (transform.position + otherGrunt.transform.position) / 2f;
         cluster.transform.rotation = Quaternion.identity;
@@ -276,6 +285,8 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
         _currentHealth -= amount;
         
         if (_currentHealth > 0f) return;
+        
+        if (cluster) RemoveFromCluster();
         
         if (TryGetComponent<EnemyDeathBase>(out var deathScript)) deathScript.OnDeath();
         else ObjectPoolController.DeactivateInstance(gameObject);

@@ -72,7 +72,7 @@ public class GruntClusterController : MonoBehaviour
                 currentClosestGrunt = potentialClosestGrunt;
         }
 
-        if (currentClosestGrunt && currentClosestGrunt.cluster &&
+        if (currentClosestGrunt && currentClosestGrunt.cluster && currentClosestGrunt.cluster != this &&
             Vector3.Distance(transform.position, currentClosestGrunt.transform.position) <= joinClusterRadius &&
             currentClosestGrunt.state is GruntController.GruntState.Searching or GruntController.GruntState.Afraid)
         {
@@ -103,10 +103,10 @@ public class GruntClusterController : MonoBehaviour
 
     public void RemoveGrunt(GruntController grunt)
     {
-        if (_grunts.Contains(grunt)) return;
+        if (!_grunts.Contains(grunt)) return;
         
         _grunts.Remove(grunt);
-        
+
         if (_grunts.Count == 0) ObjectPoolController.DeactivateInstance(gameObject);
     }
     

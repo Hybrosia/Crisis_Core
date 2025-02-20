@@ -17,7 +17,7 @@ public static class ObjectPoolController
             var objectToActivate = inactiveObjects[prefab][0];
             activeObjects[prefab].Add(objectToActivate);
             inactiveObjects[prefab].RemoveAt(0);
-            
+
             objectToActivate.SetActive(true);
             return objectToActivate;
         }
@@ -33,18 +33,20 @@ public static class ObjectPoolController
     public static void DeactivateInstance(GameObject instance)
     {
         GameObject key = null;
-        foreach (var pair in activeObjects)
+        foreach (var (prefab, objects) in activeObjects)
         {
-            if (!pair.Value.Contains(instance)) continue;
+            if (!objects.Contains(instance)) continue;
             
-            key = pair.Key;
+            key = prefab;
             break;
         }
 
         if (key)
         {
+            instance.SetActive(false);
             activeObjects[key].Remove(instance);
             inactiveObjects[key].Add(instance);
+            //TODO: Make child of a transform in DontDestroyOnLoad
         }
         else Object.Destroy(instance);
     }
