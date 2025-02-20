@@ -73,7 +73,8 @@ MonoBehaviour:
   animator: {fileID: 3443446225145940932}
   agent: {fileID: 2543458437996301214}
   clusterPrefab: {fileID: 6818586410695207716, guid: 15ffe423a92752348860c292b39c75af, type: 3}
-  meleeRange: 1.2
+  startMeleeRange: 1.2
+  meleeRange: 1.5
   closeRange: 3.5
   viewDistance: 12
   joinClusterRadius: 3

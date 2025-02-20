@@ -7,9 +7,11 @@ public class SpewerController : MonoBehaviour, IEnemyHealthManager
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private float startMeleeRange, startCloseRange, jumpDistance, jumpChance;
+    [SerializeField] private float startMeleeRange, meleeRange, startCloseRange, closeRange, crashDamageRange, jumpDistance, jumpChance, biteDamage, crashDamage;
     [SerializeField] private float biteAttackCooldown, burpAttackCooldown, projectileAttackCooldown, chargeTime, staggerTime, staggerDamageThreshold;
     [SerializeField] private float maxHealth;
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private Transform spawnPoint;
     [SerializeField] private float[] jumpAngles;
     
     private float _currentHealth;
@@ -223,19 +225,30 @@ public class SpewerController : MonoBehaviour, IEnemyHealthManager
         SetMoving();
     }
 
+    //Damages player if too close to impact. Trigger from animation event.
     public void OnGroundHit()
     {
-        //Damage player if too close to impact. Trigger from animation event.
-    }
-
-    private void DoBiteAttack()
-    {
-        //Check for damage. Trigger from animation event.
+        if (Vector3.Distance(transform.position, playerData.PlayerPos) > crashDamageRange) return;
+        
+        playerData.player.GetComponent<PlayerHealthManager>().TakeDamage(crashDamage);
     }
     
-    private void DoProjectileAttack()
+    //Tries to damage the player. Trigger from animation event.
+    private void DoBiteAttack()
     {
-        //Spawn projectiles. Trigger from animation event.
+        if (Vector3.Distance(transform.position, playerData.PlayerPos) > meleeRange) return;
+        
+        playerData.player.GetComponent<PlayerHealthManager>().TakeDamage(biteDamage);
+    }
+
+    //Spawns a projectile and fires it towards the player. Trigger from animation event.
+    public void DoProjectileAttack()
+    {
+        var projectile = ObjectPoolController.SpawnFromPrefab(projectilePrefab);
+
+        projectile.transform.position = spawnPoint.position;
+        projectile.transform.rotation = transform.rotation;
+        projectile.GetComponent<EnemyProjectile>().Fire();
     }
     
     private void ResetHealth()

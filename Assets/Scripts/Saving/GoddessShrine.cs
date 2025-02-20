@@ -8,9 +8,10 @@ public class GoddessShrine : MonoBehaviour
     public void Interact()
     {
         var breathManager = FindFirstObjectByType<BreathManager>();
+        var playerHealth = FindFirstObjectByType<PlayerHealthManager>();
         
         if (breathManager) breathManager.ResetBreath();
-        //TODO: Reset the player's health
+        if (playerHealth) playerHealth.ResetHealth();
 
         SaveProgress();
     }

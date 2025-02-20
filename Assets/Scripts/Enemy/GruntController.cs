@@ -12,7 +12,7 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private GameObject clusterPrefab;
-    [SerializeField] private float meleeRange, closeRange, viewDistance, joinClusterRadius, avoidPlayerDistance, damage;
+    [SerializeField] private float startMeleeRange, meleeRange, closeRange, viewDistance, joinClusterRadius, avoidPlayerDistance, damage;
     [SerializeField] private float knockbackInitialSpeed, stunTime, angryTime, knockbackSlowdownPerSecond, attackCooldown;
     [SerializeField] private float maxHealth;
     [SerializeField] private LayerMask terrain;
@@ -43,12 +43,12 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
     {
         ActiveGrunts.Add(this);
         _standardSpeed = agent.speed;
-        StartCoroutine(Start());
+        StartCoroutine(OnEnableCoroutine());
     }
     
     private void OnDisable() => ActiveGrunts.Remove(this);
 
-    private IEnumerator Start()
+    private IEnumerator OnEnableCoroutine()
     {
         yield return null;
         SetSearching();
@@ -170,17 +170,20 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
         agent.SetDestination(lastKnownPlayerPosition);
 
         if (!canSeePlayer) return;
-        if (Vector3.Distance(transform.position, playerData.PlayerPos) > meleeRange) return;
+        if (Vector3.Distance(transform.position, playerData.PlayerPos) > startMeleeRange) return;
         if (Time.time < attackTimer) return;
 
         attackTimer = Time.time + attackCooldown;
         animator.Play("AngryAttack");
     }
-
-    public void DoMeleeAttack()
+    
+    //Tries to damage the player. Trigger from animation event.
+    private void DoMeleeAttack()
     {
         if (cluster && cluster.IsProperCluster()) return;
-        //Damage the player. Trigger from AnimationEvent.
+        if (Vector3.Distance(transform.position, playerData.PlayerPos) > meleeRange) return;
+        
+        playerData.player.GetComponent<PlayerHealthManager>().TakeDamage(damage);
     }
 
     //Starts an attack.

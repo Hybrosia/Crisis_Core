@@ -156,6 +156,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7198605136309838000}
+  - {fileID: 5513067818054608447}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &99470371786135812
@@ -209,9 +210,14 @@ MonoBehaviour:
   animator: {fileID: 4113950443374376155}
   agent: {fileID: 3667032472396893926}
   startMeleeRange: 1.2
+  meleeRange: 1.5
   startCloseRange: 3.5
+  closeRange: 4
+  crashDamageRange: 3
   jumpDistance: 6
   jumpChance: 0.5
+  biteDamage: 20
+  crashDamage: 30
   biteAttackCooldown: 1
   burpAttackCooldown: 1
   projectileAttackCooldown: 1
@@ -219,6 +225,8 @@ MonoBehaviour:
   staggerTime: 5
   staggerDamageThreshold: 30
   maxHealth: 100
+  projectilePrefab: {fileID: 3843047016448404708, guid: b330f1f89dd96ca47873890178731024, type: 3}
+  spawnPoint: {fileID: 5513067818054608447}
   jumpAngles:
   - 60
   - 90
@@ -248,3 +256,34 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &7438525889402817787
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5513067818054608447}
+  m_Layer: 6
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5513067818054608447
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7438525889402817787}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2925284238351104166}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

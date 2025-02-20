@@ -8,6 +8,8 @@ public class SpitterController : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private float startJumpRange, endJumpRange, attackCooldown, jumpDistance;
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private Transform spawnPoint;
     [SerializeField] private float[] jumpAngles;
     
     private SpitterState _state;
@@ -123,8 +125,13 @@ public class SpitterController : MonoBehaviour
         }
     }
 
-    public void DoAttack()
+    //Spawns a projectile and fires it towards the player. Trigger from animation event.
+    public void DoProjectileAttack()
     {
-        //Spawn projectile and fire towards the player.
+        var projectile = ObjectPoolController.SpawnFromPrefab(projectilePrefab);
+
+        projectile.transform.position = spawnPoint.position;
+        projectile.transform.rotation = transform.rotation;
+        projectile.GetComponent<EnemyProjectile>().Fire();
     }
 }

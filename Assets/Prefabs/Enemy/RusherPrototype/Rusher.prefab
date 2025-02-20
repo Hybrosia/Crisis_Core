@@ -209,7 +209,8 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: a1613681d07b144a0bcaed6341df5d6b, type: 2}
   animator: {fileID: 338758289354158050}
   agent: {fileID: 2005329717246882769}
-  startMeleeRange: 1
+  startMeleeRange: 1.2
+  meleeRange: 1.5
   startChargeRange: 10
   maxChargeDistance: 20
   avoidPlayerRadius: 5
@@ -219,6 +220,7 @@ MonoBehaviour:
   meleeAttackCooldown: 1
   chargeTime: 4
   staggerTime: 5
+  damage: 20
   maxHealth: 100
 --- !u!95 &338758289354158050
 Animator:

@@ -10,8 +10,8 @@ public class RusherController : MonoBehaviour, IEnemyHealthManager
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private float startMeleeRange, startChargeRange, maxChargeDistance, avoidPlayerRadius, colliderRadius;
-    [SerializeField] private float rushSpeed, chargeAttackCooldown, meleeAttackCooldown, chargeTime, staggerTime;
+    [SerializeField] private float startMeleeRange, meleeRange, startChargeRange, maxChargeDistance, avoidPlayerRadius, colliderRadius;
+    [SerializeField] private float rushSpeed, chargeAttackCooldown, meleeAttackCooldown, chargeTime, staggerTime, damage;
     [SerializeField] private float maxHealth;
     
     private float _currentHealth;
@@ -160,11 +160,14 @@ public class RusherController : MonoBehaviour, IEnemyHealthManager
         
     }
     
+    //Tries to damage the player. Trigger from animation event.
     private void DoMeleeAttack()
     {
-        //Check for damage. Trigger from animation event.
+        if (Vector3.Distance(transform.position, playerData.PlayerPos) > meleeRange) return;
+        
+        playerData.player.GetComponent<PlayerHealthManager>().TakeDamage(damage);
     }
-
+    
     private void FixedUpdate()
     {
         if (_state != RusherState.Rushing) return;

@@ -28,11 +28,11 @@ public class BulletScript : MonoBehaviour
     {
         CurrentHealth -= weaponStats.weaponDamage;
         */
-        Destroy(gameObject);
+        ObjectPoolController.DeactivateInstance(gameObject);
     }
 
     private void OnCollisionEnter(Collision other)
     {
-        Destroy(gameObject);
+        ObjectPoolController.DeactivateInstance(gameObject);
     }
 }

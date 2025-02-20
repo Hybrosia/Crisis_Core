@@ -6,7 +6,7 @@ public class GhoulController : MonoBehaviour
     [SerializeField] private PlayerData playerData;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Animator animator;
-    [SerializeField] private float startMeleeRange, attackCooldown, damage;
+    [SerializeField] private float startMeleeRange, meleeRange, attackCooldown, damage;
     
     private GhoulState _state;
     private float _attackTimer;
@@ -71,9 +71,12 @@ public class GhoulController : MonoBehaviour
     {
         
     }
-
+    
+    //Tries to damage the player. Trigger from animation event.
     private void DoMeleeAttack()
     {
-        //Check for damage. Trigger from animation event.
+        if (Vector3.Distance(transform.position, playerData.PlayerPos) > meleeRange) return;
+        
+        playerData.player.GetComponent<PlayerHealthManager>().TakeDamage(damage);
     }
 }
