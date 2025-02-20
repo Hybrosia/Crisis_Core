@@ -81,12 +81,12 @@ public class RusherController : MonoBehaviour
     //If it is in melee range of the player, performs a melee attack.
     private void Moving(bool canSeePlayer)
     {
-        if (canSeePlayer && Time.time < _attackTimer && Vector3.Distance(transform.position, _lastKnownPlayerPosition) < startMeleeRange) SetAttacking();
-        else if (canSeePlayer && Time.time < _attackTimer  && Vector3.Distance(transform.position, _lastKnownPlayerPosition) < startChargeRange && CanMoveTowardsPlayer()) SetCharging();
+        if (canSeePlayer && Time.time > _attackTimer && Vector3.Distance(transform.position, _lastKnownPlayerPosition) < startMeleeRange) SetAttacking();
+        else if (canSeePlayer && Time.time > _attackTimer  && Vector3.Distance(transform.position, _lastKnownPlayerPosition) < startChargeRange && CanMoveTowardsPlayer()) SetCharging();
         else if (canSeePlayer && Vector3.Dot(playerData.player.forward, (transform.position - playerData.PlayerPos).normalized) > 1.6f) SetNewPath();
         else if (agent.remainingDistance < 0.2f)
         {
-            if (_currentPath.Count > 1)
+            if (_currentPath?.Count > 1)
             {
                 _currentPath.RemoveAt(0);
                 agent.SetDestination(_currentPath[0].transform.position);
@@ -107,7 +107,7 @@ public class RusherController : MonoBehaviour
 
     private void Charging(bool canSeePlayer)
     {
-        if (_chargeTimer < Time.time) return;
+        if (Time.time < _chargeTimer) return;
 
         SetRushing();
     }
@@ -172,15 +172,15 @@ public class RusherController : MonoBehaviour
         transform.position += rushSpeed * Time.fixedDeltaTime * _rushDirection;
     }
 
-    private void OnCollisionEnter(Collision col)
+    private void OnTriggerEnter(Collider col)
     {
         if (_state != RusherState.Rushing) return;
-        if (col.transform.CompareTag("Player"))
+        if (col.CompareTag("Player"))
         {
             //TODO: Set knockback on the player and deal damage.
             SetMoving();
         }
-        else
+        else if (col.CompareTag("Terrain"))
         {
             SetStaggered();
         }

@@ -9,14 +9,16 @@ public class NavigationPoint : MonoBehaviour
 
     public Dictionary<NavigationPoint, float> pointsWithCost = new Dictionary<NavigationPoint, float>();
 
-    public static List<NavigationPoint> ActiveNavigationPoints;
+    public static List<NavigationPoint> ActiveNavigationPoints = new List<NavigationPoint>();
     
     private void OnEnable() => ActiveNavigationPoints.Add(this);
     private void OnDisable() => ActiveNavigationPoints.Remove(this);
+
+    private void Start() => FindNeighbors(ActiveNavigationPoints);
     
 
     //Add all visible neighbors within the max distance.
-    public void FindNeighbors(NavigationPoint[] points)
+    public void FindNeighbors(List<NavigationPoint> points)
     {
         foreach (var point in points)
         {
@@ -72,10 +74,11 @@ public class NavigationPoint : MonoBehaviour
                     Physics.SphereCast(current.transform.position, playerCheckRadius, 
                         (neighbor.transform.position - current.transform.position).normalized, 
                         out var hitInfo, cost, player)) continue;
+
+                var newDistanceFromStart = float.PositiveInfinity;
+                if (distanceFromStart.TryGetValue(current, out var value)) newDistanceFromStart = value + cost;
                 
-                
-                var newDistanceFromStart = distanceFromStart[current] + cost;
-                if (newDistanceFromStart < distanceFromStart[neighbor])
+                if (!distanceFromStart.ContainsKey(neighbor) || newDistanceFromStart < distanceFromStart[neighbor])
                 {
                     cameFrom[current] = current;
                     distanceFromStart[current] = newDistanceFromStart;
@@ -85,10 +88,10 @@ public class NavigationPoint : MonoBehaviour
                     if (!openSet.Contains(neighbor))
                     {
                         var targetIndex = openSet.FindLastIndex(point =>
-                            estimatedRemainingDistance[point] < estimatedRemainingDistance[current]);
+                            estimatedRemainingDistance.ContainsKey(point) && estimatedRemainingDistance[point] < estimatedRemainingDistance[current]);
 
                         if (targetIndex == -1) openSet.Add(neighbor);
-                        openSet.Insert(targetIndex, neighbor);
+                        else openSet.Insert(targetIndex, neighbor);
                     }
                 }
             }

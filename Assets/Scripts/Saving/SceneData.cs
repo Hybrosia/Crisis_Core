@@ -20,12 +20,5 @@ public class SceneData : MonoBehaviour
     private void Start()
     {
         goddessShrines[SaveScript.CurrentSave.CheckpointIndex].MovePlayerHere();
-
-        navigationPoints = FindObjectsByType<NavigationPoint>(FindObjectsSortMode.None);
-
-        foreach (var navigationPoint in navigationPoints)
-        {
-            navigationPoint.FindNeighbors(navigationPoints);
-        }
     }
 }
