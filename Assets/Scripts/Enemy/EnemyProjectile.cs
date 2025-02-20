@@ -5,17 +5,15 @@ public class EnemyProjectile : MonoBehaviour
 {
     public float damage;
     [SerializeField] private float initialSpeed, fireAngle;
+    [SerializeField] private PlayerData playerData;
 
-    private Rigidbody _rigidbody;
-
-    private void Start()
-    {
-        _rigidbody = GetComponent<Rigidbody>();
-    }
+    [SerializeField] private Rigidbody rb;
 
     public void Fire()
     {
-        _rigidbody.linearVelocity = Quaternion.Euler(fireAngle, 0f, 0f) * Vector3.forward * initialSpeed;
+        var directionTowardsPlayer = (playerData.PlayerPos - transform.position).normalized;
+        print(directionTowardsPlayer);
+        rb.linearVelocity = Quaternion.Euler(fireAngle, 0f, 0f) * directionTowardsPlayer * initialSpeed;
     }
 
     private void OnTriggerEnter(Collider other)

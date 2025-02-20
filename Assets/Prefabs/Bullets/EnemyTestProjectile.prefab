@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3250611409649701520}
   - component: {fileID: 4802272352479248661}
   - component: {fileID: 1875965731978297639}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: EnemyTestProjectile
   m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
@@ -150,3 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 20
+  initialSpeed: 20
+  fireAngle: 10
+  playerData: {fileID: 11400000, guid: a1613681d07b144a0bcaed6341df5d6b, type: 2}
+  rb: {fileID: 4802272352479248661}
