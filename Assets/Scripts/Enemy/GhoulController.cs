@@ -10,7 +10,6 @@ public class GhoulController : MonoBehaviour
     
     private GhoulState _state;
     private float _attackTimer;
-    [SerializeField] private string stateString;
     
     private enum GhoulState
     {
@@ -26,7 +25,6 @@ public class GhoulController : MonoBehaviour
     
     private void Update()
     {
-        stateString = _state.ToString();
         var canSeePlayer = playerData.CanSeePlayerFromPoint(transform.position);
 
         if (_state == GhoulState.Idle) Idle(canSeePlayer);

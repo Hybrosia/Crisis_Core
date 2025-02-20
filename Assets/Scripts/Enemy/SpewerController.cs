@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public class SpewerController : MonoBehaviour
+public class SpewerController : MonoBehaviour, IEnemyHealthManager
 {
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;

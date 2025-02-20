@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public class GruntController : MonoBehaviour
+public class GruntController : MonoBehaviour, IEnemyHealthManager
 {
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
