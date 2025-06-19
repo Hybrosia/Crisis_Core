@@ -60,7 +60,8 @@ public class GhoulController : MonoBehaviour
     
     private void SetAttacking()
     {
-        _state = GhoulState.Idle;
+        print("Start attack");
+        _state = GhoulState.Attacking;
         animator.Play("Attack");
         agent.isStopped = false;
 
@@ -75,6 +76,9 @@ public class GhoulController : MonoBehaviour
     //Tries to damage the player. Trigger from animation event.
     private void DoMeleeAttack()
     {
+        print("ATtACK");
+        SetMoving();
+
         if (Vector3.Distance(transform.position, playerData.PlayerPos) > meleeRange) return;
         
         playerData.player.GetComponent<PlayerHealthManager>().TakeDamage(damage);

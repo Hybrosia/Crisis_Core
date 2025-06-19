@@ -16,7 +16,11 @@ public class GhoulExplosionController : MonoBehaviour
     {
         yield return new WaitForSeconds(timeBeforeExplosion);
 
-        ObjectPoolController.SpawnFromPrefab(gasCloudPrefab);
+        var instance = ObjectPoolController.SpawnFromPrefab(gasCloudPrefab);
+        instance.transform.parent = transform.parent;
+        instance.transform.position = transform.position;
+        instance.transform.rotation = transform.rotation;
+        
         ObjectPoolController.DeactivateInstance(gameObject);
     }
 
