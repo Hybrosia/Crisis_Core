@@ -24,8 +24,16 @@ public class GhoulExplosionController : MonoBehaviour
         ObjectPoolController.DeactivateInstance(gameObject);
     }
 
-    private void OnCollisionEnter(UnityEngine.Collision other)
+    private void OnCollisionEnter(Collision collision)
     {
-        //TODO: Despawn when hit with secondary fire or spells.
+        if (!collision.transform.CompareTag("PlayerBullet")) return;
+        StopAllCoroutines();
+        
+        var instance = ObjectPoolController.SpawnFromPrefab(gasCloudPrefab);
+        instance.transform.parent = transform.parent;
+        instance.transform.position = transform.position;
+        instance.transform.rotation = transform.rotation;
+        
+        ObjectPoolController.DeactivateInstance(gameObject);
     }
 }
