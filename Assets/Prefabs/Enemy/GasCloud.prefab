@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 8515155157667133012}
   - component: {fileID: 4658212035489168190}
   - component: {fileID: 6197361754862245932}
-  m_Layer: 0
-  m_Name: GasCloud(To Bo Implemented)
+  - component: {fileID: 4599689709276423808}
+  m_Layer: 8
+  m_Name: GasCloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,5 +107,19 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 4
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4599689709276423808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7499335630485261493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6ea7cf54d89004a8380a42ebb96661, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 20
+  damagePerSecond: 10

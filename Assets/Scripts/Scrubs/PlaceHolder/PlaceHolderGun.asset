@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: PlaceHolderGun
   m_EditorClassIdentifier: 
   fireRate: 60
-  bulletSpeed: 100
+  bulletSpeed: 50
   breathUsage: 5
   weaponDamage: 50
