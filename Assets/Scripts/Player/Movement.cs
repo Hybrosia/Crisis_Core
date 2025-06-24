@@ -139,4 +139,9 @@ public class Movement : MonoBehaviour
         return airGravity;
         
     }
+
+    public void AddMomentum(float force)
+    {
+        print("AddMomentum not implemented");
+    }
 }

@@ -12,6 +12,7 @@ public class SpewerController : MonoBehaviour, IEnemyHealthManager
     [SerializeField] private float maxHealth;
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private Transform spawnPoint;
+    [SerializeField] private GameObject burpTrigger;
     [SerializeField] private float[] jumpAngles;
     
     private float _currentHealth;
@@ -34,6 +35,7 @@ public class SpewerController : MonoBehaviour, IEnemyHealthManager
     private void OnEnable()
     {
         ResetHealth();
+        burpTrigger.SetActive(false);
         SetIdle();
     }
 
@@ -182,14 +184,14 @@ public class SpewerController : MonoBehaviour, IEnemyHealthManager
         agent.isStopped = true;
 
         _attackTimer = Time.time + burpAttackCooldown;
+        burpTrigger.SetActive(true);
     }
 
     private void Burping(bool canSeePlayer)
     {
-        //TODO: Add a collider/trigger that destroys all regular bubbles and pushes the player away.
-        
         if (Time.time < _attackTimer) return;
         
+        burpTrigger.SetActive(false);
         SetMoving();
     }
     
