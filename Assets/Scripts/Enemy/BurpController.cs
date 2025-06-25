@@ -11,6 +11,6 @@ public class BurpController : MonoBehaviour
     private void ApplyBurpEffects(Collider other)
     {
         if (other.CompareTag("Player") && other.TryGetComponent(out Movement playerMovement)) 
-            playerMovement.AddMomentum(force);
+            playerMovement.AddForce(force * transform.forward);
     }
 }

@@ -1,29 +1,33 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Movement : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     
     [SerializeField] private float airGravity = 9.81f;
-    [SerializeField] private float movementSpeed = 5f;
+    [SerializeField] private float movementInputForce = 5f;
     [SerializeField] private float jumpSpeed = 10f;
-    [SerializeField] private float runSpeed = 8f; 
+    [SerializeField] private float runInputForce = 8f;
+    [SerializeField] [Range(0.0f, 1f)] private float inputImportance = 0.8f;
     [SerializeField] [Range(0.0f, 0.5f)] private float moveSmoothTime = 0.3f;
     [SerializeField] private float sprintBreath = 50;
     [SerializeField] private float groundGravity;
     [SerializeField] private float floatGravity;
     [SerializeField] private float floatTimer = 2f;
     [SerializeField] private float floatCooldown = 15f;
+    [SerializeField] private float maxHorizontalSpeed = 10, maxFallingSpeed = 50, maxVerticalSpeed = 1000;
 
     private float _timeSinceFloat;
     private float _currentFloat = 0;
-    private bool _floatInit = false; 
+    private bool _floatInit = false;
 
-    private PlayerCollision _collisionLocal; 
+    private PlayerCollision _collisionLocal;
     private bool _isGrounded;
-    private float _verticalSpeed;
+    private Vector2 _horizontalMomentum;
+    private float _verticalMomentum;
 
-    [SerializeField] private GameObject cameraReference; 
+    [SerializeField] private GameObject cameraReference;
 
     private Rigidbody _rb;
     private Vector2 _currentDirection = Vector2.zero;
@@ -57,8 +61,8 @@ public class Movement : MonoBehaviour
         var speed = FindMovementSpeed();
         TryJump();
 
-        _verticalSpeed -= FindGravity() * Time.fixedDeltaTime;
-        if (_isGrounded && _verticalSpeed < 0f) _verticalSpeed = 0f;
+        _verticalMomentum -= FindGravity() * Time.fixedDeltaTime;
+        if (_isGrounded && _verticalMomentum < 0f) _verticalMomentum = 0f;
         
         var position = transform.position;
         
@@ -66,13 +70,18 @@ public class Movement : MonoBehaviour
         forward.y = 0f;
         forward.Normalize();
 
-        var movementVector = speed * Time.fixedDeltaTime * (forward * _currentDirection.y + cameraReference.transform.right * _currentDirection.x);
-        movementVector.y = 0f;
-        
-        position += _collisionLocal.CollideAndSlide(movementVector, position, false);
+        var inputVector = speed * Time.fixedDeltaTime * (forward * _currentDirection.y + cameraReference.transform.right * _currentDirection.x);
+        inputVector.y = 0f;
 
-        if (_isGrounded && _verticalSpeed < 0.1f) position += _collisionLocal.CollideAndSlide(Vector3.down * 0.05f, position, true);
-        else position += _collisionLocal.CollideAndSlide(_verticalSpeed * Time.fixedDeltaTime * Vector3.up, position, true);
+        _horizontalMomentum = Vector2.Lerp(_horizontalMomentum, new Vector2(inputVector.x, inputVector.z), inputImportance);
+        Vector3.ClampMagnitude(_horizontalMomentum, maxHorizontalSpeed);
+
+        _verticalMomentum = Mathf.Clamp(_verticalMomentum, -maxFallingSpeed, maxVerticalSpeed);
+
+        position += _collisionLocal.CollideAndSlide(new Vector3(_horizontalMomentum.x, 0f, _horizontalMomentum.y), position, false);
+
+        if (_isGrounded && _verticalMomentum < 0.1f) position += _collisionLocal.CollideAndSlide(Vector3.down * 0.05f, position, true);
+        else position += _collisionLocal.CollideAndSlide(_verticalMomentum * Time.fixedDeltaTime * Vector3.up, position, true);
 
         _rb.MovePosition(position);
 
@@ -87,7 +96,7 @@ public class Movement : MonoBehaviour
     {
         if (!JumpAction) return;
 
-        _verticalSpeed = jumpSpeed;
+        _verticalMomentum = jumpSpeed;
     }
 
     private float FindMovementSpeed()
@@ -96,10 +105,9 @@ public class Movement : MonoBehaviour
         {
             _breathManager.Breath -= sprintBreath * Time.deltaTime;
             _breathManager.timeSinceLastBreathUse = Time.time;
-            return runSpeed;
-            
+            return runInputForce;
         }
-        return movementSpeed;
+        return movementInputForce;
     }
     
     private bool JumpAction => _isGrounded && _jumpPressed;
@@ -137,11 +145,11 @@ public class Movement : MonoBehaviour
         if (_isGrounded && !JumpAction) return groundGravity;
         if (!_isGrounded && FloatAction()) return floatGravity;
         return airGravity;
-        
     }
 
-    public void AddMomentum(float force)
+    public void AddForce(Vector3 force)
     {
-        print("AddMomentum not implemented");
+        _verticalMomentum += force.y;
+        _horizontalMomentum += new Vector2(force.x, force.z);
     }
 }
