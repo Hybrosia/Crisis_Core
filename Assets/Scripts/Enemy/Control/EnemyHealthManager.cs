@@ -31,4 +31,9 @@ public class EnemyHealthManager : MonoBehaviour, IEnemyHealthManager
 public interface IEnemyHealthManager
 {
     public void TakeDamage(float amount);
+
+    public void Push(Vector3 direction)
+    {
+        
+    }
 }

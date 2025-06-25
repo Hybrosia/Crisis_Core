@@ -14,6 +14,8 @@ public class WeaponMain : MonoBehaviour
     [SerializeField] private List<GameObject> weaponItem;
     [SerializeField] private List<GameObject> bullets;
 
+    private AltFireScript _altFireScript;
+
     private BreathManager _breathManager;
 
     private float _availableGuns; 
@@ -24,9 +26,8 @@ public class WeaponMain : MonoBehaviour
     public float SwapTimer { get; private set; }
     public float TimeToSwap { get; private set; }
 
-    private float _timeSinceLastShot;
-
-    private Vector3 _shootDirection;
+    public float _timeSinceLastShot;
+    
     private Camera _camera; 
     void Start()
     {
@@ -40,6 +41,8 @@ public class WeaponMain : MonoBehaviour
         
         weaponItem[CurrentWeapon].SetActive(true);
         weaponStats = weaponStatsList[CurrentWeapon];
+
+        _altFireScript = GetComponent<AltFireScript>();
     }
 
     
@@ -49,6 +52,8 @@ public class WeaponMain : MonoBehaviour
         currentWeaponItem = weaponItem[CurrentWeapon];
         bullet = bullets[CurrentWeapon];
 
+        TimeToSwap = weaponStats.swapTime;
+        
         _timeSinceLastShot += Time.deltaTime;
         if (Time.deltaTime > SwapTimer + TimeToSwap)
         {
@@ -61,10 +66,22 @@ public class WeaponMain : MonoBehaviour
         {
             OnFire();
         }
+
+        if (InputManager.AltFirePressed)
+        {
+            OnAltFire();
+        }
+
+        if (InputManager.AltFireReleased)
+        {
+            OnAltRelease();
+        }
+        
+        
     }
 
-    private bool CanShoot() => _timeSinceLastShot > 1f / (weaponStats.fireRate / 60) &&
-                               _breathManager.Breath > weaponStats.breathUsage && !IsSwap;
+    public bool CanShoot() => _timeSinceLastShot > 1f / (weaponStats.fireRate / 60) &&
+                               _breathManager.Breath > weaponStats.breathUsage && !IsSwap; 
 
     private void OnCycleWeapon()
     {
@@ -118,7 +135,6 @@ public class WeaponMain : MonoBehaviour
         var screenCentreCoordinates = new Vector3(0.5f, 0f, 0f);
         var ray = _camera.ViewportPointToRay(screenCentreCoordinates);
         // if it doesn't hit anything, make our projectile target 1000 away from us (adjust this accordingly)
-        _shootDirection = Physics.Raycast(ray, out var hit) ? hit.point : ray.GetPoint(1000f);
 
         GameObject bulletInstance = Instantiate(bullet, spawnPoint.transform.position, quaternion.identity);
         bulletInstance.GetComponent<Rigidbody>().linearVelocity = spawnPoint.transform.forward * weaponStats.bulletSpeed;
@@ -128,4 +144,18 @@ public class WeaponMain : MonoBehaviour
         _breathManager.Breath -= weaponStats.breathUsage;
         _breathManager.timeSinceLastBreathUse = Time.time;
     }
+
+    private void OnAltFire()
+    {
+        if (!CanShoot()) return;
+        _altFireScript.castAltInit();
+        print("Initiated fire");
+    }
+
+    private void OnAltRelease()
+    {
+        _altFireScript.castAltFinish(CurrentWeapon);
+        print("exited fire");
+    }
+    
 }

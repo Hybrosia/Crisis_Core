@@ -434,10 +434,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 305142465}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -570,10 +570,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 404870556}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -646,7 +646,7 @@ Transform:
   m_GameObject: {fileID: 629049734}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.6102095, y: 1.3536209, z: 7.542708}
+  m_LocalPosition: {x: -5.6102095, y: 2.078, z: 7.542708}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -674,6 +674,7 @@ GameObject:
   - component: {fileID: 685205611}
   - component: {fileID: 685205613}
   - component: {fileID: 685205614}
+  - component: {fileID: 685205615}
   m_Layer: 3
   m_Name: PlayerObject
   m_TagString: Player
@@ -690,7 +691,7 @@ Transform:
   m_GameObject: {fileID: 685205601}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.5742095, y: 1.381379, z: -7.232708}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -800,10 +801,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 685205601}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -833,15 +834,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   airGravity: 12
-  movementSpeed: 5
+  movementInputForce: 5
   jumpSpeed: 9
-  runSpeed: 10
+  runInputForce: 8
+  inputImportance: 0.8
   moveSmoothTime: 0.3
   sprintBreath: 5
   groundGravity: 10
   floatGravity: 0.5
   floatTimer: 3
   floatCooldown: 15
+  maxHorizontalSpeed: 10
+  maxFallingSpeed: 50
+  maxVerticalSpeed: 1000
   cameraReference: {fileID: 910890033}
 --- !u!114 &685205610
 MonoBehaviour:
@@ -894,6 +899,7 @@ MonoBehaviour:
   - {fileID: 909645711}
   bullets:
   - {fileID: 7130806580141448841, guid: 433ecad7d3b0458469ffa17c7acfa4eb, type: 3}
+  _timeSinceLastShot: 0
 --- !u!114 &685205613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -920,6 +926,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+--- !u!114 &685205615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685205601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5063bc62b52cf9c4f8461fe41c4a35d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AltBullets:
+  - {fileID: 3336359440974332202, guid: dee3ef0a618f2b24b826a3e855d9e924, type: 3}
+  spawnPoint: {fileID: 1134544121}
+  RushFireMinSpeed: 3
+  RushFireMaxSpeed: 5
+  RushFireMinLifetime: 2
+  RushFireMaxLifetime: 2
+  rushFireMin: 0
+  rushFireMax: 1
+  trapFireMin: 0
 --- !u!1 &827610913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1036,10 +1064,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 827610913}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1675,10 +1703,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1653112337}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -2014,7 +2042,7 @@ Transform:
   m_GameObject: {fileID: 2057656754}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.6366343, y: 0.6780251, z: -0.9615493}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

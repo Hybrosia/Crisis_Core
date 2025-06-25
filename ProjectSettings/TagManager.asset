@@ -7,6 +7,8 @@ TagManager:
   - PlayerBullet
   - Terrain
   - EnemyProjectile
+  - Enemy
+  - Wall
   layers:
   - Default
   - TransparentFX
