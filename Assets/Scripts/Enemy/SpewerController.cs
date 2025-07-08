@@ -248,8 +248,6 @@ public class SpewerController : MonoBehaviour, IEnemyHealthManager
     public void DoProjectileAttack()
     {
         var projectile = ObjectPoolController.SpawnFromPrefab(projectilePrefab);
-        print(projectile);
-        print(projectilePrefab);
 
         projectile.transform.position = spawnPoint.position;
         projectile.transform.rotation = transform.rotation;

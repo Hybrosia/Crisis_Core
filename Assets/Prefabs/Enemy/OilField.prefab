@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9000349473613907470}
   - component: {fileID: 6478023494324526411}
   - component: {fileID: 5903956342957742127}
+  - component: {fileID: 1265164783967604627}
   m_Layer: 9
   m_Name: Trigger
   m_TagString: Untagged
@@ -109,6 +110,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1265164783967604627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353011207880244415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2456e0063a19a784d880cad43fa92547, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageMultiplier: 1
 --- !u!1 &4540212587090938813
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +138,7 @@ GameObject:
   - component: {fileID: 2382782264520548800}
   - component: {fileID: 595548089973075887}
   - component: {fileID: 3588194509560792264}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: OilField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
