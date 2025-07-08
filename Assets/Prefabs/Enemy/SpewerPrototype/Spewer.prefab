@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 390010597587028041}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 2}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalPosition: {x: 0, y: 0.5, z: 1.5}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2925284238351104166}
@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c31e4696f46c724ab6c4a5bfc0d732b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  force: 1
 --- !u!1 &1908679877493831516
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,8 +347,8 @@ MonoBehaviour:
   chargeTime: 3
   staggerTime: 5
   staggerDamageThreshold: 30
-  maxHealth: 100
-  projectilePrefab: {fileID: 3843047016448404708, guid: b330f1f89dd96ca47873890178731024, type: 3}
+  maxHealth: 300
+  projectilePrefab: {fileID: 633711186097392521, guid: 3e6ab6cf68296a046a22b388e25bed58, type: 3}
   spawnPoint: {fileID: 5513067818054608447}
   burpTrigger: {fileID: 390010597587028041}
   jumpAngles:

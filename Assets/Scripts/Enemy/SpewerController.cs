@@ -208,6 +208,7 @@ public class SpewerController : MonoBehaviour, IEnemyHealthManager
     {
         if (Time.time < _attackTimer) return;
         
+        DoProjectileAttack();
         SetMoving();
     }
     
@@ -247,10 +248,12 @@ public class SpewerController : MonoBehaviour, IEnemyHealthManager
     public void DoProjectileAttack()
     {
         var projectile = ObjectPoolController.SpawnFromPrefab(projectilePrefab);
+        print(projectile);
+        print(projectilePrefab);
 
         projectile.transform.position = spawnPoint.position;
         projectile.transform.rotation = transform.rotation;
-        projectile.GetComponent<EnemyProjectile>().Fire();
+        projectile.GetComponent<OilProjectileController>().Fire();
     }
     
     private void ResetHealth()
@@ -261,14 +264,14 @@ public class SpewerController : MonoBehaviour, IEnemyHealthManager
     //Takes damage.
     public void TakeDamage(float amount)
     {
-        if (_state is SpewerState.Idle or SpewerState.Moving && playerData.CanSeePlayerFromPoint(transform.position))
-        {
-            if (Random.Range(0f, 1f) > jumpChance) SetJumping();
-            else SetCharging();
-        }
-        
         //TODO: If hit with bubble rush, set _damageTakenWhileCharging to staggerDamageThreshold.
         if (_state == SpewerState.Charging) _damageTakenWhileCharging += amount;
+        
+        if (_state is SpewerState.Idle or SpewerState.Moving && playerData.CanSeePlayerFromPoint(transform.position))
+        {
+            if (Random.Range(0f, 1f) <= jumpChance) SetJumping();
+            else SetCharging();
+        }
         
         _currentHealth -= amount;
         

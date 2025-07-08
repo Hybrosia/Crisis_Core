@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4540212587090938813
+--- !u!1 &633711186097392521
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,49 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7080945870627474254}
-  - component: {fileID: 1383387765701688303}
-  - component: {fileID: 3445647981051303770}
-  - component: {fileID: 4509127430648724991}
-  - component: {fileID: 6487516065382626657}
+  - component: {fileID: 6986447737044311962}
+  - component: {fileID: 3126800765328420060}
+  - component: {fileID: 156086896805109924}
+  - component: {fileID: 2938147593684441955}
+  - component: {fileID: 3821185643284201052}
+  - component: {fileID: -4791363133569370345}
   m_Layer: 8
-  m_Name: OilField(To be implemented)
-  m_TagString: Untagged
+  m_Name: OilProjectile
+  m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7080945870627474254
+--- !u!4 &6986447737044311962
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4540212587090938813}
+  m_GameObject: {fileID: 633711186097392521}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.6591, y: 0.86, z: -7.8424}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1383387765701688303
+--- !u!33 &3126800765328420060
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4540212587090938813}
+  m_GameObject: {fileID: 633711186097392521}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &3445647981051303770
+--- !u!23 &156086896805109924
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4540212587090938813}
+  m_GameObject: {fileID: 633711186097392521}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -88,13 +89,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4509127430648724991
+--- !u!135 &2938147593684441955
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4540212587090938813}
+  m_GameObject: {fileID: 633711186097392521}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -107,19 +108,50 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 4
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6487516065382626657
+--- !u!54 &3821185643284201052
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633711186097392521}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 2
+--- !u!114 &-4791363133569370345
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4540212587090938813}
+  m_GameObject: {fileID: 633711186097392521}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a6ea7cf54d89004a8380a42ebb96661, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a821db53e1ccee4bae0bed6c5a29b96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 20
-  damagePerSecond: 10
+  damage: 5
+  initialSpeed: 20
+  fireAngle: 20
+  playerData: {fileID: 11400000, guid: a1613681d07b144a0bcaed6341df5d6b, type: 2}
+  rb: {fileID: 3821185643284201052}
+  oilFieldPrefab: {fileID: 4540212587090938813, guid: 8faee2fa12a4d8041b475c7b9a910b53, type: 3}

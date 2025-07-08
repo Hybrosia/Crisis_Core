@@ -1,13 +1,12 @@
-using System;
 using UnityEngine;
 
-public class EnemyProjectile : MonoBehaviour
+public class OilProjectileController : MonoBehaviour
 {
     public float damage;
     [SerializeField] private float initialSpeed, fireAngle;
     [SerializeField] private PlayerData playerData;
-
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private GameObject oilFieldPrefab;
 
     public void Fire()
     {
@@ -21,6 +20,9 @@ public class EnemyProjectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        var oilField = ObjectPoolController.SpawnFromPrefab(oilFieldPrefab);
+        oilField.transform.position = transform.position;
+
         ObjectPoolController.DeactivateInstance(gameObject);
     }
 
