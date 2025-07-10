@@ -77,7 +77,7 @@ MonoBehaviour:
   meleeRange: 1.5
   closeRange: 3.5
   viewDistance: 12
-  joinClusterRadius: 3
+  joinClusterRadius: 10
   avoidPlayerDistance: 5
   damage: 10
   knockbackInitialSpeed: 2

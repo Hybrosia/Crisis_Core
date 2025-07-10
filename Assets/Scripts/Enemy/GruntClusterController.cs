@@ -20,6 +20,11 @@ public class GruntClusterController : MonoBehaviour
         _standardSpeed = agent.speed;
     }
 
+    private void OnDisable()
+    {
+        _grunts.Clear();
+    }
+
     private void Update()
     {
         if (_grunts.Any(grunt => Vector3.Distance(grunt.transform.position, transform.position) > maxGruntDistanceWhileMoving))
@@ -56,11 +61,13 @@ public class GruntClusterController : MonoBehaviour
         if (canSeePlayer)
             foreach (var grunt in _grunts.Where(grunt => 
                          Vector3.Distance(grunt.transform.position, playerData.PlayerPos) < meleeRange && 
-                         Time.time < grunt.attackTimer))
+                         Time.time > grunt.attackTimer))
             {
                 grunt.StartAttack();
             }
         
+        if (agent.remainingDistance > 0.1f) return;
+
         GruntController currentClosestGrunt = null;
         var currentSmallestDistance = float.PositiveInfinity;
         
@@ -71,7 +78,7 @@ public class GruntClusterController : MonoBehaviour
                 Vector3.Distance(potentialClosestGrunt.transform.position, grunt.transform.position) < currentSmallestDistance) 
                 currentClosestGrunt = potentialClosestGrunt;
         }
-
+        
         if (currentClosestGrunt && currentClosestGrunt.cluster && currentClosestGrunt.cluster != this &&
             Vector3.Distance(transform.position, currentClosestGrunt.transform.position) <= joinClusterRadius &&
             currentClosestGrunt.state is GruntController.GruntState.Searching or GruntController.GruntState.Afraid)
@@ -86,7 +93,7 @@ public class GruntClusterController : MonoBehaviour
     private void AttackAsCluster()
     {
         foreach (var grunt in _grunts) grunt.StartAttack();
-        //TODO: If any one of them hits, deal the total damage of all of them.
+        playerData.player.GetComponent<PlayerHealthManager>().TakeDamage(baseDamage + damagePerGrunt * _grunts.Count);
     }
 
     public bool IsProperCluster()
