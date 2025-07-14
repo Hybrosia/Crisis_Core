@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2794925122888786990}
   - component: {fileID: 2408728561300169969}
   - component: {fileID: 4183002219402574240}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4847,7 +4847,7 @@ GameObject:
   - component: {fileID: 8753187982185513637}
   - component: {fileID: 7729802460623445293}
   - component: {fileID: 4085557092613221859}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SandShark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4929,7 +4929,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: a1613681d07b144a0bcaed6341df5d6b, type: 2}
   animator: {fileID: 3056596970136200356}
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 4085557092613221859}
   agent: {fileID: 7068483543598710507}
   sandParticles: {fileID: 2408728561300169969}
   hitBox: {fileID: 7721161892384831404}
@@ -5058,7 +5058,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7175548178686434110}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5093,7 +5093,7 @@ GameObject:
   - component: {fileID: 8806930830285773402}
   - component: {fileID: 8743520024278575186}
   - component: {fileID: 3684646961036553879}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5184,7 +5184,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
