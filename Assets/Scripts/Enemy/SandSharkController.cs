@@ -53,7 +53,7 @@ public class SandSharkController : MonoBehaviour
     {
         _state = SandSharkState.Idle;
         sandParticles.Stop();
-        hitBox.SetActive(false);
+        hitBox.SetActive(true);
         animator.Play("Idle");
     }
     
@@ -74,8 +74,9 @@ public class SandSharkController : MonoBehaviour
     private void Moving(bool canSeePlayer)
     {
         if (Vector3.Distance(transform.position, playerData.PlayerPos) < diveRange) SetDiving();
-
-        agent.SetDestination(playerData.PlayerPos);
+        
+        if (canSeePlayer) agent.SetDestination(playerData.PlayerPos);
+        else if (agent.remainingDistance < 0.1f) SetIdle();
     }
     
     private void SetDiving()
