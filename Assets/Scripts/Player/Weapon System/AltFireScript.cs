@@ -10,9 +10,13 @@ public class AltFireScript : MonoBehaviour
 
     [SerializeField] private float RushFireMinSpeed, RushFireMaxSpeed;
     [SerializeField] private float RushFireMinLifetime, RushFireMaxLifetime;
+    
+    [SerializeField] private float BounceFireMaxSpeed;
+    [SerializeField] private float BounceFireMinLifetime, BounceFireMaxLifetime;
 
     
     [SerializeField] private float rushFireMin, rushFireMax;
+    [SerializeField] private float bounceFireMax;
     [SerializeField] private float trapFireMin; 
 
     private float TimerInit;
@@ -50,20 +54,26 @@ public class AltFireScript : MonoBehaviour
             GameObject bulletInstance = Instantiate(AltBullets[0], spawnPoint.transform.position, spawnPoint.transform.rotation);
             bulletInstance.GetComponent<Rigidbody>().linearVelocity = spawnPoint.transform.forward * RushFireMaxSpeed;
             Destroy(bulletInstance, RushFireMaxLifetime);
-            print("FireWeakBullet");
         }
         else if (TimerExit - TimerInit >= rushFireMin)
         {
             GameObject bulletInstance = Instantiate(AltBullets[0], spawnPoint.transform.position, spawnPoint.transform.rotation);
             bulletInstance.GetComponent<Rigidbody>().linearVelocity = spawnPoint.transform.forward * RushFireMinSpeed;
             Destroy(bulletInstance, RushFireMinLifetime);
-            print("FireStrongBullet");
+            
         }
     }
 
     private void altFire1()
     {
-        throw new NotImplementedException();
+        TimerExit = Time.time; 
+        
+        if (TimerExit - TimerInit >= rushFireMax)
+        {
+            GameObject bulletInstance = Instantiate(AltBullets[1], spawnPoint.transform.position, spawnPoint.transform.rotation);
+            bulletInstance.GetComponent<Rigidbody>().linearVelocity = spawnPoint.transform.forward * BounceFireMaxSpeed;
+            Destroy(bulletInstance, BounceFireMaxLifetime);
+        }
     }
     
     private void altFire2()

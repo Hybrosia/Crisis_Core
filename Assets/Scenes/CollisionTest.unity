@@ -940,13 +940,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AltBullets:
   - {fileID: 3336359440974332202, guid: dee3ef0a618f2b24b826a3e855d9e924, type: 3}
+  - {fileID: 3336359440974332202, guid: dee3ef0a618f2b24b826a3e855d9e924, type: 3}
   spawnPoint: {fileID: 1134544121}
   RushFireMinSpeed: 3
   RushFireMaxSpeed: 5
   RushFireMinLifetime: 2
   RushFireMaxLifetime: 2
+  BounceFireMaxSpeed: 0
+  BounceFireMinLifetime: 0
+  BounceFireMaxLifetime: 0
   rushFireMin: 0
   rushFireMax: 1
+  bounceFireMax: 0
   trapFireMin: 0
 --- !u!1 &827610913
 GameObject:
