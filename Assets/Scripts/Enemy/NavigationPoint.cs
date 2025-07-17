@@ -22,6 +22,8 @@ public class NavigationPoint : MonoBehaviour
     {
         foreach (var point in points)
         {
+            if (point == this) continue;
+            
             var distance = Vector3.Distance(transform.position, point.transform.position);
             
             if (distance > maxDistanceToNeighbor) continue;

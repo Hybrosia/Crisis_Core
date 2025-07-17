@@ -54,7 +54,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 0
 --- !u!114 &5130762304242030574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
   healthPerGrunt: 30
   baseDamage: 0
   damagePerGrunt: 10
-  meleeRange: 1.2
+  meleeRange: 2
   maxGruntDistanceWhileMoving: 3
-  joinClusterRadius: 3
+  joinClusterRadius: 10
   numberRequiredToCluster: 5

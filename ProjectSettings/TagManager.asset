@@ -7,8 +7,7 @@ TagManager:
   - PlayerBullet
   - Terrain
   - EnemyProjectile
-  - Enemy
-  - Wall
+  - OilField
   layers:
   - Default
   - TransparentFX
@@ -19,8 +18,8 @@ TagManager:
   - Enemy
   - Terrain
   - EnemyProjectile
-  - 
-  - 
+  - OilField
+  - IgnorePlayer
   - 
   - 
   - 

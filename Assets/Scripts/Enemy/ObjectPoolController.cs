@@ -12,6 +12,11 @@ public static class ObjectPoolController
         if (!inactiveObjects.ContainsKey(prefab)) inactiveObjects.Add(prefab, new List<GameObject>());
         if (!activeObjects.ContainsKey(prefab)) activeObjects.Add(prefab, new List<GameObject>());
 
+        while (inactiveObjects[prefab].Count > 0 && !inactiveObjects[prefab][0])
+        {
+            inactiveObjects[prefab].RemoveAt(0);
+        }
+        
         if (inactiveObjects[prefab].Count > 0)
         {
             var objectToActivate = inactiveObjects[prefab][0];

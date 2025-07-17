@@ -12,7 +12,11 @@ public class EnemyProjectile : MonoBehaviour
     public void Fire()
     {
         var directionTowardsPlayer = (playerData.PlayerPos - transform.position).normalized;
-        rb.linearVelocity = Quaternion.Euler(fireAngle, 0f, 0f) * directionTowardsPlayer * initialSpeed;
+        var rotationAxis = Vector3.Cross(directionTowardsPlayer, Vector3.up);
+        var rotation = Quaternion.identity;
+        if (rotationAxis != Vector3.zero) Quaternion.AngleAxis(fireAngle, rotationAxis);
+
+        rb.linearVelocity = rotation * directionTowardsPlayer * initialSpeed;
     }
 
     private void OnTriggerEnter(Collider other)

@@ -56,18 +56,18 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
     
     private void Update()
     {
-        if (cluster)
-        {
-            agent.SetDestination(cluster.transform.position);
-            return;
-        }
-        
         var canSeePlayer = playerData.CanSeePlayerFromPoint(transform.position);
 
         if (canSeePlayer)
         {
             lastSawPlayerTime = Time.time;
             lastKnownPlayerPosition = playerData.PlayerPos;
+        }
+        
+        if (cluster)
+        {
+            agent.SetDestination(cluster.transform.position);
+            return;
         }
         
         if (state == GruntState.Searching) Searching(canSeePlayer);
@@ -147,7 +147,7 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
     {
         agent.speed = Mathf.Clamp(agent.speed - Time.deltaTime * knockbackSlowdownPerSecond, 0f, knockbackInitialSpeed);
 
-        if (Time.time < _stunTimer) SetAngry();
+        if (Time.time > _stunTimer) SetAngry();
         else if (agent.remainingDistance < 0.05f) agent.isStopped = true;
     }
     
@@ -165,7 +165,7 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
 
     private void Angry(bool canSeePlayer)
     {
-        if (Time.time < _angryTimer) SetSearching();
+        if (Time.time > _angryTimer) SetSearching();
 
         agent.SetDestination(lastKnownPlayerPosition);
 
@@ -210,12 +210,16 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
         var vectorFromPlayerToGrunt = transform.position - playerData.PlayerPos;
 
         var closestNavigationPoint = NavigationPoint.FindPointClosestToPosition(transform.position);
-        var furthestNavigationPoint = NavigationPoint.ActiveNavigationPoints
-            .Where(point => Vector3.Dot(vectorFromPlayerToGrunt, point.transform.position - transform.position) > 0f)
+        var preferredPoints = NavigationPoint.ActiveNavigationPoints
+            .Where(point => Vector3.Dot(vectorFromPlayerToGrunt, point.transform.position - transform.position) > 0f).ToList();
+
+        if (!preferredPoints.Any()) preferredPoints = NavigationPoint.ActiveNavigationPoints.ToList();
+
+        var furthestNavigationPoint = preferredPoints
             .Aggregate((furthest, next) => 
                 Vector3.Distance(transform.position, next.transform.position) >
                 Vector3.Distance(transform.position, furthest.transform.position) ? next : furthest);
-
+        
         return closestNavigationPoint.FindShortestPathToPoint(furthestNavigationPoint);
     }
 
@@ -223,6 +227,8 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
     public GruntController FindClosestVisibleGrunt()
     {
         var validGrunts = ActiveGrunts
+            .Where(grunt => grunt != this)
+            .Where(grunt => !grunt.cluster || (grunt.cluster && grunt.cluster != cluster))
             .Where(grunt => Vector3.Distance(transform.position, grunt.transform.position) < viewDistance)
             .Where(grunt =>
                 !Physics.Raycast(transform.position, (grunt.transform.position - transform.position).normalized,
@@ -237,9 +243,9 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
 
     private void CreateCluster(GruntController otherGrunt)
     {
-        var test = ObjectPoolController.SpawnFromPrefab(clusterPrefab);
-        var test2 = test.GetComponent<GruntClusterController>();
-        PutInCluster(test2);
+        var clusterObject = ObjectPoolController.SpawnFromPrefab(clusterPrefab);
+        var clusterScript = clusterObject.GetComponent<GruntClusterController>();
+        PutInCluster(clusterScript);
         
         cluster.transform.position = (transform.position + otherGrunt.transform.position) / 2f;
         cluster.transform.rotation = Quaternion.identity;
@@ -264,6 +270,7 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
 
     public void ExplodeCluster(Vector3 centerOfCluster)
     {
+        cluster = null;
         var explosionDirection = (transform.position - centerOfCluster).normalized;
 
         if (explosionDirection == Vector3.zero)
