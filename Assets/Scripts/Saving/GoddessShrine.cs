@@ -35,7 +35,6 @@ public class GoddessShrine : MonoBehaviour
     {
         SaveScript.CurrentSave.LevelIndex = SceneData.CurrentSceneData.levelIndex;
         SaveScript.CurrentSave.CheckpointIndex = SceneData.CurrentSceneData.goddessShrines.IndexOf(this);
-        //TODO: SaveScript.CurrentSave.Spirit = Player.spirit;
         
         SaveScript.WriteSaveToDisk();
     }
