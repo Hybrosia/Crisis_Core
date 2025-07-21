@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class PlayerHealthManager : MonoBehaviour
 {
     [SerializeField] private float maxHealth;
+    [SerializeField] private TextMeshProUGUI healthUI;
 
     private float _currentHealth;
 
@@ -44,7 +46,7 @@ public class PlayerHealthManager : MonoBehaviour
 
     private void UpdateHealthUI()
     {
-        //TODO: Implement.
+        healthUI.text = Mathf.RoundToInt(_currentHealth).ToString();
     }
     
     private void OnTriggerEnter(Collider other)

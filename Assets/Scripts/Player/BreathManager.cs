@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BreathManager : MonoBehaviour
 {
@@ -7,10 +8,12 @@ public class BreathManager : MonoBehaviour
     public float timeSinceLastBreathUse;
     [SerializeField] private float timeNeededForBreathRestoration;
     [SerializeField] private float BreathIncrease;
+    [SerializeField] private Image breathUI;
 
     private void Start()
     {
         Breath = MaximumBreath; 
+        UpdateBreathUI();
     }
 
     private void Update()
@@ -18,6 +21,7 @@ public class BreathManager : MonoBehaviour
         if (Breath > MaximumBreath)
         {
             Breath = MaximumBreath;
+            UpdateBreathUI();
         }
         
         RestoreBreath();
@@ -31,12 +35,19 @@ public class BreathManager : MonoBehaviour
         if (BreathRestoration())
         {
             Breath = Breath + BreathIncrease;
-            timeSinceLastBreathUse = Time.time; 
+            timeSinceLastBreathUse = Time.time;
+            UpdateBreathUI();
         }
     }
 
     public void ResetBreath()
     {
         Breath = MaximumBreath;
+        UpdateBreathUI();
+    }
+
+    private void UpdateBreathUI()
+    {
+        breathUI.fillAmount = Breath / MaximumBreath;
     }
 }
