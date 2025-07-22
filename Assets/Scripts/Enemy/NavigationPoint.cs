@@ -11,7 +11,11 @@ public class NavigationPoint : MonoBehaviour
 
     public static List<NavigationPoint> ActiveNavigationPoints = new List<NavigationPoint>();
     
-    private void OnEnable() => ActiveNavigationPoints.Add(this);
+    private void OnEnable()
+    {
+        ActiveNavigationPoints.Add(this);
+    }
+
     private void OnDisable() => ActiveNavigationPoints.Remove(this);
 
     private void Start() => FindNeighbors(ActiveNavigationPoints);
@@ -27,8 +31,7 @@ public class NavigationPoint : MonoBehaviour
             var distance = Vector3.Distance(transform.position, point.transform.position);
             
             if (distance > maxDistanceToNeighbor) continue;
-            if (Physics.Raycast(transform.position, Vector3.Normalize(point.transform.position - transform.position), float.PositiveInfinity, terrain)) continue;
-            
+            if (Physics.Raycast(transform.position, Vector3.Normalize(point.transform.position - transform.position), distance, terrain)) continue;
             pointsWithCost.Add(point, distance);
         }
         

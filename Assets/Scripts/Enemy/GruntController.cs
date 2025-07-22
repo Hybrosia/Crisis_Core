@@ -198,11 +198,22 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
     {
         var closestNavigationPoint = NavigationPoint.FindPointClosestToPosition(transform.position);
         
-        var newPoints = closestNavigationPoint.pointsWithCost.Keys.ToList();
-        if (_lastCheckedPoint) newPoints.Remove(_lastCheckedPoint);
-        if (newPoints.Count != 0) return newPoints[Random.Range(0, newPoints.Count)].transform.position;
-        if (_lastCheckedPoint) return _lastCheckedPoint.transform.position;
-        return closestNavigationPoint.transform.position;
+        Vector3 nextPoint;
+
+        if (Vector3.Distance(closestNavigationPoint.transform.position, transform.position) > 0.3f) nextPoint = closestNavigationPoint.transform.position;
+        else
+        {
+            var newPoints = closestNavigationPoint.pointsWithCost.Keys.ToList();
+            if (_lastCheckedPoint) newPoints.Remove(_lastCheckedPoint);
+
+            if (newPoints.Count != 0) nextPoint = newPoints[Random.Range(0, newPoints.Count)].transform.position;
+            else if (_lastCheckedPoint) nextPoint = _lastCheckedPoint.transform.position;
+            else nextPoint = closestNavigationPoint.transform.position;
+        }
+
+        _lastCheckedPoint = closestNavigationPoint;
+        
+        return nextPoint;
     }
 
     private List<NavigationPoint> GetPathAwayFromPlayer()
