@@ -152,4 +152,9 @@ public class Movement : MonoBehaviour
         _verticalMomentum += force.y;
         _horizontalMomentum += new Vector2(force.x, force.z);
     }
+
+    public void SetVerticalSpeed(float speed)
+    {
+        _verticalMomentum = speed;
+    }
 }
