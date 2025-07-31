@@ -21,9 +21,11 @@ public class Movement : MonoBehaviour
     private float _timeSinceFloat;
     private float _currentFloat = 0;
     private bool _floatInit = false;
+    private bool _disableFloat;
 
     private PlayerCollision _collisionLocal;
-    private bool _isGrounded;
+    public bool IsGrounded { get; private set; }
+    
     private Vector2 _horizontalMomentum;
     private float _verticalMomentum;
 
@@ -56,13 +58,14 @@ public class Movement : MonoBehaviour
             ref _currentDirectionVelocity, moveSmoothTime);
         
         var groundNormal = _collisionLocal.GetGroundNormal();
-        _isGrounded = groundNormal != Vector3.zero;
+        IsGrounded = groundNormal != Vector3.zero;
+        if (IsGrounded) _disableFloat = false;
 
         var speed = FindMovementSpeed();
         TryJump();
 
         _verticalMomentum -= FindGravity() * Time.fixedDeltaTime;
-        if (_isGrounded && _verticalMomentum < 0f) _verticalMomentum = 0f;
+        if (IsGrounded && _verticalMomentum < 0f) _verticalMomentum = 0f;
         
         var position = transform.position;
         
@@ -80,7 +83,7 @@ public class Movement : MonoBehaviour
 
         position += _collisionLocal.CollideAndSlide(new Vector3(_horizontalMomentum.x, 0f, _horizontalMomentum.y), position, false);
 
-        if (_isGrounded && _verticalMomentum < 0.1f) position += _collisionLocal.CollideAndSlide(Vector3.down * 0.05f, position, true);
+        if (IsGrounded && _verticalMomentum < 0.1f) position += _collisionLocal.CollideAndSlide(Vector3.down * 0.05f, position, true);
         else position += _collisionLocal.CollideAndSlide(_verticalMomentum * Time.fixedDeltaTime * Vector3.up, position, true);
 
         _rb.MovePosition(position);
@@ -90,7 +93,7 @@ public class Movement : MonoBehaviour
         ResetFloatTimer();
     }
 
-    private bool Sprint() => _isGrounded && InputManager.Sprint && (_breathManager.Breath >= sprintBreath);
+    private bool Sprint() => IsGrounded && InputManager.Sprint && (_breathManager.Breath >= sprintBreath);
 
     private void TryJump()
     {
@@ -110,10 +113,10 @@ public class Movement : MonoBehaviour
         return movementInputForce;
     }
     
-    private bool JumpAction => _isGrounded && _jumpPressed;
+    private bool JumpAction => IsGrounded && _jumpPressed;
     
-    private bool CanFloat => _timeSinceFloat >= floatCooldown; 
-    bool FloatAction() => _rb.linearVelocity.y <= 0f && CanFloat && !_isGrounded && InputManager.JumpHeld;
+    private bool CanFloat => !_disableFloat && _timeSinceFloat >= floatCooldown; 
+    bool FloatAction() => _rb.linearVelocity.y <= 0f && CanFloat && !IsGrounded && InputManager.JumpHeld;
 
     private void ResetFloatTimer()
     {
@@ -142,8 +145,8 @@ public class Movement : MonoBehaviour
     
     private float FindGravity()
     {
-        if (_isGrounded && !JumpAction) return groundGravity;
-        if (!_isGrounded && FloatAction()) return floatGravity;
+        if (IsGrounded && !JumpAction) return groundGravity;
+        if (!IsGrounded && FloatAction()) return floatGravity;
         return airGravity;
     }
 
@@ -156,5 +159,15 @@ public class Movement : MonoBehaviour
     public void SetVerticalSpeed(float speed)
     {
         _verticalMomentum = speed;
+    }
+
+    public Vector3 GetHorizontalSpeed()
+    {
+        return new Vector3(_horizontalMomentum.x, 0f, _horizontalMomentum.y);
+    }
+
+    public void DisableFloat()
+    {
+        _disableFloat = true;
     }
 }

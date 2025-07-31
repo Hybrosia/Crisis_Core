@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public static class ObjectPoolController
@@ -59,6 +60,7 @@ public static class ObjectPoolController
     //Returns a list of all active objects that have been spawned from the given prefab.
     public static List<GameObject> GetActiveObjects(GameObject prefab)
     {
-        return activeObjects[prefab];
+        activeObjects.TryGetValue(prefab, out var objects);
+        return objects;
     }
 }
