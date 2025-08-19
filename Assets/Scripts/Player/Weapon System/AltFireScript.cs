@@ -12,12 +12,15 @@ public class AltFireScript : MonoBehaviour
     [SerializeField] private float RushFireMinLifetime, RushFireMaxLifetime;
     
     [SerializeField] private float BounceFireMaxSpeed;
-    [SerializeField] private float BounceFireMinLifetime, BounceFireMaxLifetime;
+    [SerializeField] private float BounceFireMaxLifetime;
+    
+    [SerializeField] private float TrapFireMaxLifetime;
+    [SerializeField] private float TrapFireMaxSpeed;
 
     
     [SerializeField] private float rushFireMin, rushFireMax;
     [SerializeField] private float bounceFireMax;
-    [SerializeField] private float trapFireMin; 
+    [SerializeField] private float trapFireMax; 
 
     private float TimerInit;
     private float TimerExit;
@@ -68,7 +71,7 @@ public class AltFireScript : MonoBehaviour
     {
         TimerExit = Time.time; 
         
-        if (TimerExit - TimerInit >= rushFireMax)
+        if (TimerExit - TimerInit >= bounceFireMax)
         {
             GameObject bulletInstance = Instantiate(AltBullets[1], spawnPoint.transform.position, spawnPoint.transform.rotation);
             bulletInstance.GetComponent<Rigidbody>().linearVelocity = spawnPoint.transform.forward * BounceFireMaxSpeed;
@@ -78,6 +81,13 @@ public class AltFireScript : MonoBehaviour
     
     private void altFire2()
     {
-        throw new NotImplementedException();
+        TimerExit = Time.time; 
+        
+        if (TimerExit - TimerInit >= trapFireMax)
+        {
+            GameObject bulletInstance = Instantiate(AltBullets[2], spawnPoint.transform.position, spawnPoint.transform.rotation);
+            bulletInstance.GetComponent<Rigidbody>().linearVelocity = spawnPoint.transform.forward * TrapFireMaxSpeed;
+            Destroy(bulletInstance, TrapFireMaxLifetime);
+        }
     }
 }

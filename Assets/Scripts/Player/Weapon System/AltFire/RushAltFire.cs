@@ -54,11 +54,12 @@ public class RushAltFire : MonoBehaviour
             {
                 
                 enemy.Push(transform.forward);
+                ObjectPoolController.DeactivateInstance(gameObject);
             }
         }
         else if (other.CompareTag("Wall"))
         {
-            Destroy(gameObject);
+            ObjectPoolController.DeactivateInstance(gameObject);
         }
     }
 }

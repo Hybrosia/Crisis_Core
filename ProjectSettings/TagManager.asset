@@ -9,6 +9,7 @@ TagManager:
   - EnemyProjectile
   - OilField
   - Wall
+  - Enemy
   layers:
   - Default
   - TransparentFX
