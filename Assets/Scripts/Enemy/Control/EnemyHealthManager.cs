@@ -36,4 +36,9 @@ public interface IEnemyHealthManager
     {
         
     }
+
+    public void Trap()
+    {
+        
+    }
 }
