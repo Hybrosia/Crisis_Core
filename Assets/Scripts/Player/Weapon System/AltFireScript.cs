@@ -24,15 +24,24 @@ public class AltFireScript : MonoBehaviour
 
     private float TimerInit;
     private float TimerExit;
+
+    [SerializeField] private Animator _animator;
     
     
     
     
-    
-    public void castAltInit()
+    public void castAltInit(int weaponNumber)
     {
         TimerInit = Time.time;
-        print("Started firing timer");
+        print("Started firing timer");switch (weaponNumber)
+        {
+            case 0: _animator.Play("RushFireTestAnimation");
+                break;
+            case 1 : throw new NotImplementedException();
+                break;
+            case 2: throw new NotImplementedException();
+                break;
+        }
     }
 
     public void castAltFinish(int weaponNumber)
@@ -57,13 +66,20 @@ public class AltFireScript : MonoBehaviour
             GameObject bulletInstance = Instantiate(AltBullets[0], spawnPoint.transform.position, spawnPoint.transform.rotation);
             bulletInstance.GetComponent<Rigidbody>().linearVelocity = spawnPoint.transform.forward * RushFireMaxSpeed;
             Destroy(bulletInstance, RushFireMaxLifetime);
+            
+            _animator.Play("Idle");
         }
         else if (TimerExit - TimerInit >= rushFireMin)
         {
             GameObject bulletInstance = Instantiate(AltBullets[0], spawnPoint.transform.position, spawnPoint.transform.rotation);
             bulletInstance.GetComponent<Rigidbody>().linearVelocity = spawnPoint.transform.forward * RushFireMinSpeed;
             Destroy(bulletInstance, RushFireMinLifetime);
-            
+            _animator.Play("Idle");
+        }
+        else
+        {
+            _animator.Play("Idle");
+            return;
         }
     }
 

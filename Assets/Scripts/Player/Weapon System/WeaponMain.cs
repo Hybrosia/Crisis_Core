@@ -148,7 +148,7 @@ public class WeaponMain : MonoBehaviour
     private void OnAltFire()
     {
         if (!CanShoot()) return;
-        _altFireScript.castAltInit();
+        _altFireScript.castAltInit(CurrentWeapon);
         print("Initiated fire");
     }
 
