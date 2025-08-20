@@ -1,11 +1,13 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class SettingsController : MonoBehaviour
 {
     [SerializeField] private TMP_Dropdown resolutionSelect;
     [SerializeField] private Toggle fullscreenToggle;
+    [SerializeField] private AudioMixer audioMixer;
     private static Canvas _settingsCanvas;
 
     public static void ShowSettings()
@@ -52,5 +54,39 @@ public class SettingsController : MonoBehaviour
                 QualitySettings.antiAliasing = 8;
                 break;
         }
+    }
+    
+    private void SetVolume(string parameter, float volume)
+    {
+        audioMixer.SetFloat(parameter, Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
+    }
+    
+    public void SetMasterVolume(float volume)
+    {
+        SetVolume("Master", volume);
+    }
+    
+    //Sets the sound effect volume.
+    public void SetSfxVolume(float volume)
+    {
+        SetVolume("SFX", volume);
+    }
+    
+    //Sets the music volume.
+    public void SetMusicVolume(float volume)
+    {
+        SetVolume("Music", volume);
+    }
+    
+    //Sets the ambience volume.
+    public void SetAmbienceVolume(float volume)
+    {
+        SetVolume("Ambience", volume);
+    }
+    
+    //Sets the ambience volume.
+    public void SetVoiceVolume(float volume)
+    {
+        SetVolume("Voice", volume);
     }
 }
