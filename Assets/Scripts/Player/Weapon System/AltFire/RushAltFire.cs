@@ -52,8 +52,6 @@ public class RushAltFire : MonoBehaviour
         {
             if (other.TryGetComponent(out IEnemyHealthManager enemy))
             {
-                
-                enemy.Push(transform.forward);
                 ObjectPoolController.DeactivateInstance(gameObject);
             }
         }
