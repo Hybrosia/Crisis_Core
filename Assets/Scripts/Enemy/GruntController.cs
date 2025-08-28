@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public class GruntController : MonoBehaviour, IEnemyHealthManager
+public class GruntController : MonoBehaviour, IEnemyHealthManager, IEnemyTrapManager
 {
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
@@ -27,6 +26,7 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
     private float _stunTimer, _angryTimer;
     private NavigationPoint _lastCheckedPoint;
     private List<NavigationPoint> _currentPath;
+    private bool _isTrapped, _preTrappedMovingState;
     
     public static List<GruntController> ActiveGrunts = new List<GruntController>();
 
@@ -43,6 +43,7 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
     {
         ActiveGrunts.Add(this);
         _standardSpeed = agent.speed;
+        _isTrapped = false;
         StartCoroutine(OnEnableCoroutine());
     }
     
@@ -56,6 +57,12 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
     
     private void Update()
     {
+        if (_isTrapped)
+        {
+            UpdateWhileTrapped();
+            return;
+        }
+        
         var canSeePlayer = playerData.CanSeePlayerFromPoint(transform.position);
 
         if (canSeePlayer)
@@ -311,5 +318,27 @@ public class GruntController : MonoBehaviour, IEnemyHealthManager
         
         if (TryGetComponent<EnemyDeathBase>(out var deathScript)) deathScript.OnDeath();
         else ObjectPoolController.DeactivateInstance(gameObject);
+    }
+    
+    public void Trap()
+    {
+        _isTrapped = true;
+        _preTrappedMovingState = agent.isStopped;
+        agent.isStopped = true;
+        animator.speed = 0f;
+    }
+
+    public void Untrap()
+    {
+        _isTrapped = false;
+        agent.Warp(transform.position);
+        agent.isStopped = _preTrappedMovingState;
+        animator.speed = 1f;
+    }
+
+    private void UpdateWhileTrapped()
+    {
+        _stunTimer += Time.deltaTime;
+        _angryTimer += Time.deltaTime;
     }
 }

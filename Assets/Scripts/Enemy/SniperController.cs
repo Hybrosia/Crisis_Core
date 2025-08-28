@@ -1,9 +1,8 @@
-using System;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class SniperController : MonoBehaviour
+public class SniperController : MonoBehaviour, IEnemyTrapManager
 {
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
@@ -17,6 +16,7 @@ public class SniperController : MonoBehaviour
     private float _timer;
     private Transform _target;
     private Vector3 _lastSeenMovementVector;
+    private bool _isTrapped;
     
     public enum SniperState
     {
@@ -28,6 +28,7 @@ public class SniperController : MonoBehaviour
     
     private void OnEnable()
     {
+        _isTrapped = false;
         SniperPosition closestPosition = null;
         var distanceToClosest = float.PositiveInfinity;
         foreach (var sniperPosition in SniperPosition.ActiveSniperPositions)
@@ -51,6 +52,12 @@ public class SniperController : MonoBehaviour
 
     private void Update()
     {
+        if (_isTrapped)
+        {
+            UpdateWhileTrapped();
+            return;
+        }
+
         if (_state == SniperState.Idle) Idle();
         else if (_state == SniperState.Targeting) Targeting();
         else if (_state == SniperState.NoTarget) NoTarget();
@@ -211,5 +218,23 @@ public class SniperController : MonoBehaviour
         {
             Destroy(hitTarget.gameObject);
         }
+    }
+    
+    public void Trap()
+    {
+        _isTrapped = true;
+        animator.speed = 0f;
+    }
+
+    public void Untrap()
+    {
+        _isTrapped = false;
+        animator.speed = 1f;
+        SetPosition(_currentPosition);
+    }
+
+    private void UpdateWhileTrapped()
+    {
+        _timer += Time.deltaTime;
     }
 }

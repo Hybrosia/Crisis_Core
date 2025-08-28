@@ -1,10 +1,10 @@
-using System;
 using UnityEngine;
 
 public class TrapAltFire : MonoBehaviour
 {
     private SphereCollider _collider;
     private Rigidbody _rigidbody;
+    [SerializeField] private GameObject trapBubblePrefab;
     
     
     void Start()
@@ -19,8 +19,10 @@ public class TrapAltFire : MonoBehaviour
         {
             if (hit.TryGetComponent(out IEnemyHealthManager enemy))
             {
-                
-                enemy.Trap();
+                var bubble = ObjectPoolController.SpawnFromPrefab(trapBubblePrefab);
+                bubble.transform.position = hit.transform.position;
+                bubble.GetComponent<TrapBubbleController>().Trap(hit.gameObject);
+
                 ObjectPoolController.DeactivateInstance(gameObject);
             }
         }

@@ -1,17 +1,14 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
-using Random = UnityEngine.Random;
 
-public class RusherController : MonoBehaviour, IEnemyHealthManager
+public class RusherController : MonoBehaviour, IEnemyHealthManager, IEnemyTrapManager
 {
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private float startMeleeRange, meleeRange, startChargeRange, maxChargeDistance, avoidPlayerRadius, colliderRadius;
-    [SerializeField] private float rushSpeed, chargeAttackCooldown, meleeAttackCooldown, chargeTime, staggerTime, damage;
+    [SerializeField] private float rushSpeed, chargeAttackCooldown, meleeAttackCooldown, chargeTime, staggerTime, damage, knockbackForce;
     [SerializeField] private float maxHealth;
     
     private float _currentHealth;
@@ -19,6 +16,7 @@ public class RusherController : MonoBehaviour, IEnemyHealthManager
     private float _attackTimer, _staggerTimer, _chargeTimer;
     private Vector3 _lastKnownPlayerPosition, _startRushPoint, _rushDirection;
     private List<NavigationPoint> _currentPath = new List<NavigationPoint>();
+    private bool _isTrapped, _preTrappedMovingState;
 
     private enum RusherState
     {
@@ -34,10 +32,17 @@ public class RusherController : MonoBehaviour, IEnemyHealthManager
     {
         ResetHealth();
         SetIdle();
+        _isTrapped = false;
     }
 
     private void Update()
     {
+        if (_isTrapped)
+        {
+            UpdateWhileTrapped();
+            return;
+        }
+        
         var canSeePlayer = playerData.CanSeePlayerFromPoint(transform.position);
 
         if (canSeePlayer)
@@ -180,7 +185,8 @@ public class RusherController : MonoBehaviour, IEnemyHealthManager
         if (_state != RusherState.Rushing) return;
         if (col.CompareTag("Player"))
         {
-            //TODO: Set knockback on the player and deal damage.
+            col.GetComponent<Movement>().AddForce(knockbackForce * (playerData.PlayerPos - transform.position).normalized);
+            col.GetComponent<PlayerHealthManager>().TakeDamage(damage);
             SetMoving();
         }
         else if (col.CompareTag("Terrain"))
@@ -231,5 +237,28 @@ public class RusherController : MonoBehaviour, IEnemyHealthManager
         
         if (TryGetComponent<EnemyDeathBase>(out var deathScript)) deathScript.OnDeath();
         else ObjectPoolController.DeactivateInstance(gameObject);
+    }
+
+    public void Trap()
+    {
+        _isTrapped = true;
+        _preTrappedMovingState = agent.isStopped;
+        agent.isStopped = true;
+        animator.speed = 0f;
+    }
+
+    public void Untrap()
+    {
+        _isTrapped = false;
+        agent.Warp(transform.position);
+        agent.isStopped = _preTrappedMovingState;
+        animator.speed = 1f;
+    }
+
+    private void UpdateWhileTrapped()
+    {
+        _attackTimer += Time.deltaTime;
+        _staggerTimer += Time.deltaTime;
+        _chargeTimer += Time.deltaTime;
     }
 }

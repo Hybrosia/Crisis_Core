@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public class SpitterController : MonoBehaviour
+public class SpitterController : MonoBehaviour, IEnemyTrapManager
 {
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
@@ -15,6 +15,7 @@ public class SpitterController : MonoBehaviour
     private SpitterState _state;
     private float _attackTimer;
     private Vector3 _lastKnownPlayerPosition;
+    private bool _isTrapped, _preTrappedMovingState;
     
     private enum SpitterState
     {
@@ -26,10 +27,17 @@ public class SpitterController : MonoBehaviour
     private void OnEnable()
     {
         SetIdle();
+        _isTrapped = false;
     }
 
     private void Update()
     {
+        if (_isTrapped)
+        {
+            UpdateWhileTrapped();
+            return;
+        }
+
         var canSeePlayer = playerData.CanSeePlayerFromPoint(transform.position);
 
         if (canSeePlayer)
@@ -133,5 +141,26 @@ public class SpitterController : MonoBehaviour
         projectile.transform.position = spawnPoint.position;
         projectile.transform.rotation = transform.rotation;
         projectile.GetComponent<EnemyProjectile>().Fire();
+    }
+    
+    public void Trap()
+    {
+        _isTrapped = true;
+        _preTrappedMovingState = agent.isStopped;
+        agent.isStopped = true;
+        animator.speed = 0f;
+    }
+
+    public void Untrap()
+    {
+        _isTrapped = false;
+        agent.Warp(transform.position);
+        agent.isStopped = _preTrappedMovingState;
+        animator.speed = 1f;
+    }
+
+    private void UpdateWhileTrapped()
+    {
+        _attackTimer += Time.deltaTime;
     }
 }

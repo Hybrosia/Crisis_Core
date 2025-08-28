@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public class SpewerController : MonoBehaviour, IEnemyHealthManager
+public class SpewerController : MonoBehaviour, IEnemyHealthManager, IEnemyTrapManager
 {
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
@@ -19,6 +19,7 @@ public class SpewerController : MonoBehaviour, IEnemyHealthManager
     private SpewerState _state;
     private float _attackTimer, _staggerTimer, _chargeTimer, _damageTakenWhileCharging;
     private Vector3 _lastKnownPlayerPosition;
+    private bool _isTrapped, _preTrappedMovingState;
     
     private enum SpewerState
     {
@@ -37,10 +38,17 @@ public class SpewerController : MonoBehaviour, IEnemyHealthManager
         ResetHealth();
         burpTrigger.SetActive(false);
         SetIdle();
+        _isTrapped = false;
     }
 
     private void Update()
     {
+        if (_isTrapped)
+        {
+            UpdateWhileTrapped();
+            return;
+        }
+        
         var canSeePlayer = playerData.CanSeePlayerFromPoint(transform.position);
 
         if (canSeePlayer)
@@ -277,5 +285,28 @@ public class SpewerController : MonoBehaviour, IEnemyHealthManager
         
         if (TryGetComponent<EnemyDeathBase>(out var deathScript)) deathScript.OnDeath();
         else ObjectPoolController.DeactivateInstance(gameObject);
+    }
+    
+    public void Trap()
+    {
+        _isTrapped = true;
+        _preTrappedMovingState = agent.isStopped;
+        agent.isStopped = true;
+        animator.speed = 0f;
+    }
+
+    public void Untrap()
+    {
+        _isTrapped = false;
+        agent.Warp(transform.position);
+        agent.isStopped = _preTrappedMovingState;
+        animator.speed = 1f;
+    }
+
+    private void UpdateWhileTrapped()
+    {
+        _attackTimer += Time.deltaTime;
+        _staggerTimer += Time.deltaTime;
+        _chargeTimer += Time.deltaTime;
     }
 }

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SandSharkController : MonoBehaviour
+public class SandSharkController : MonoBehaviour, IEnemyTrapManager
 {
     [SerializeField] private PlayerData playerData;
     [SerializeField] private Animator animator;
@@ -15,6 +15,7 @@ public class SandSharkController : MonoBehaviour
     private SandSharkState _state;
     private Vector3 _lastKnownPlayerPosition;
     private float _attackTimer, _stunTimer;
+    private bool _isTrapped, _preTrappedMovingState;
 
     private enum SandSharkState
     {
@@ -31,10 +32,17 @@ public class SandSharkController : MonoBehaviour
         sandParticles.Clear();
         audioSource.Stop();
         SetIdle();
+        _isTrapped = false;
     }
 
     private void Update()
     {
+        if (_isTrapped)
+        {
+            UpdateWhileTrapped();
+            return;
+        }
+
         var canSeePlayer = playerData.CanSeePlayerFromPoint(transform.position);
 
         if (canSeePlayer)
@@ -131,5 +139,27 @@ public class SandSharkController : MonoBehaviour
         playerData.player.GetComponent<Movement>().AddForce(launchForce * Vector3.up);
         
         animator.Play("Attack");
+    }
+    
+    public void Trap()
+    {
+        _isTrapped = true;
+        _preTrappedMovingState = agent.isStopped;
+        agent.isStopped = true;
+        animator.speed = 0f;
+    }
+
+    public void Untrap()
+    {
+        _isTrapped = false;
+        agent.Warp(transform.position);
+        agent.isStopped = _preTrappedMovingState;
+        animator.speed = 1f;
+    }
+
+    private void UpdateWhileTrapped()
+    {
+        _attackTimer += Time.deltaTime;
+        _stunTimer += Time.deltaTime;
     }
 }

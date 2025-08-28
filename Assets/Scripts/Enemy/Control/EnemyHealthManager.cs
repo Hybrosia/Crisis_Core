@@ -31,9 +31,13 @@ public class EnemyHealthManager : MonoBehaviour, IEnemyHealthManager
 public interface IEnemyHealthManager
 {
     public void TakeDamage(float amount);
+}
 
-    public void Trap()
-    {
-        
-    }
+public interface IEnemyTrapManager
+{
+    //Suspend execution, make sure timers act properly, pause NavMeshAgents and pause animations.
+    public void Trap();
+    
+    //Reset any necessary variables and state.
+    public void Untrap();
 }

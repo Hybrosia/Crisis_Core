@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GhoulController : MonoBehaviour
+public class GhoulController : MonoBehaviour, IEnemyTrapManager
 {
     [SerializeField] private PlayerData playerData;
     [SerializeField] private NavMeshAgent agent;
@@ -10,6 +10,7 @@ public class GhoulController : MonoBehaviour
     
     private GhoulState _state;
     private float _attackTimer;
+    private bool _isTrapped, _preTrappedMovingState;
     
     private enum GhoulState
     {
@@ -21,10 +22,17 @@ public class GhoulController : MonoBehaviour
     private void OnEnable()
     {
         SetIdle();
+        _isTrapped = false;
     }
     
     private void Update()
     {
+        if (_isTrapped)
+        {
+            UpdateWhileTrapped();
+            return;
+        }
+
         var canSeePlayer = playerData.CanSeePlayerFromPoint(transform.position);
 
         if (_state == GhoulState.Idle) Idle(canSeePlayer);
@@ -76,11 +84,32 @@ public class GhoulController : MonoBehaviour
     //Tries to damage the player. Trigger from animation event.
     private void DoMeleeAttack()
     {
-        print("ATtACK");
+        print("ATTACK");
         SetMoving();
 
         if (Vector3.Distance(transform.position, playerData.PlayerPos) > meleeRange) return;
         
         playerData.player.GetComponent<PlayerHealthManager>().TakeDamage(damage);
+    }
+    
+    public void Trap()
+    {
+        _isTrapped = true;
+        _preTrappedMovingState = agent.isStopped;
+        agent.isStopped = true;
+        animator.speed = 0f;
+    }
+
+    public void Untrap()
+    {
+        _isTrapped = false;
+        agent.Warp(transform.position);
+        agent.isStopped = _preTrappedMovingState;
+        animator.speed = 1f;
+    }
+
+    private void UpdateWhileTrapped()
+    {
+        _attackTimer += Time.deltaTime;
     }
 }
