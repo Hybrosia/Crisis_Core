@@ -41,7 +41,7 @@ public class RushAltFire : MonoBehaviour
     public Vector3 GetTerrainNormal()
     {
         var position = transform.position;
-        if (Physics.SphereCast(position, _sphereCollider.radius, transform.forward, out var hit, 0.1f, whatIsTerrain))
+        if (Physics.SphereCast(position, _sphereCollider.radius - 0.1f, transform.forward, out var hit, _rigidbody.linearVelocity.magnitude * Time.fixedDeltaTime + 0.1f, whatIsTerrain))
             return hit.normal;
         return Vector3.zero;
     }
