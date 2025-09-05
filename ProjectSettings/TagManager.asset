@@ -10,6 +10,7 @@ TagManager:
   - OilField
   - Wall
   - Enemy
+  - BounceBox
   layers:
   - Default
   - TransparentFX

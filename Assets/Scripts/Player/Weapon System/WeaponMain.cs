@@ -77,6 +77,7 @@ public class WeaponMain : MonoBehaviour
             OnAltRelease();
         }
         
+        print("Current weapon" + CurrentWeapon);
         
     }
 
