@@ -15,16 +15,17 @@ public class TrapAltFire : MonoBehaviour
 
     private void OnTriggerEnter(Collider hit)
     {
+        print(hit);
         if (hit.CompareTag("Enemy"))
         {
-            if (hit.TryGetComponent(out IEnemyHealthManager enemy))
-            {
-                var bubble = ObjectPoolController.SpawnFromPrefab(trapBubblePrefab);
-                bubble.transform.position = hit.transform.position;
-                bubble.GetComponent<TrapBubbleController>().Trap(hit.gameObject);
+            var enemy = hit.GetComponentInParent<IEnemyHealthManager>();
+            
+            var bubble = ObjectPoolController.SpawnFromPrefab(trapBubblePrefab);
+            bubble.transform.position = hit.transform.parent.position;
+            bubble.GetComponent<TrapBubbleController>().Trap(hit.transform.parent.gameObject);
 
-                ObjectPoolController.DeactivateInstance(gameObject);
-            }
+            ObjectPoolController.DeactivateInstance(gameObject);
+            
         }
         else if (hit.CompareTag("Terrain") || hit.CompareTag("Wall"))
         {

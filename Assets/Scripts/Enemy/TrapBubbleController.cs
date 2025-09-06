@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TrapBubbleController : MonoBehaviour
@@ -21,9 +22,15 @@ public class TrapBubbleController : MonoBehaviour
 
     private void Update()
     {
-        if (_timer < Time.time) return;
-        
+        if (Time.time < _timer) return;
+        print("TIME");
         Pop();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        print("Collision" + other);
+        if (other.CompareTag("PlayerBullet")) Pop();
     }
 
     private void OnTriggerStay(Collider other)
@@ -46,7 +53,7 @@ public class TrapBubbleController : MonoBehaviour
 
     private void Pop()
     {
-        return;
+        print("Pop");
         _trappedEnemy.transform.parent = _originalParent;
         _trappedEnemy.GetComponent<IEnemyTrapManager>().Untrap();
         

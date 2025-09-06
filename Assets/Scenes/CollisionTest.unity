@@ -1308,7 +1308,7 @@ MonoBehaviour:
   AltBullets:
   - {fileID: 3336359440974332202, guid: dee3ef0a618f2b24b826a3e855d9e924, type: 3}
   - {fileID: 1502240272774560629, guid: 130ffbfb2223e664bb30c5c0442f17ae, type: 3}
-  - {fileID: 3336359440974332202, guid: dee3ef0a618f2b24b826a3e855d9e924, type: 3}
+  - {fileID: 5497258912446924018, guid: 32b2ea4795c1e8047a7cfefd24dd4fa7, type: 3}
   spawnPoint: {fileID: 1134544121}
   RushFireMinSpeed: 4
   RushFireMaxSpeed: 10
@@ -1317,7 +1317,7 @@ MonoBehaviour:
   BounceFireMaxSpeed: 10
   BounceFireMaxLifetime: 5
   TrapFireMaxLifetime: 5
-  TrapFireMaxSpeed: 0
+  TrapFireMaxSpeed: 10
   rushFireMin: 0.5
   rushFireMax: 1
   bounceFireMax: 0
@@ -1889,10 +1889,6 @@ PrefabInstance:
     - target: {fileID: 5360139588222076474, guid: 90b0fa6cd92bb9341bfc42c4074c19a5, type: 3}
       propertyPath: m_Name
       value: Grunt
-      objectReference: {fileID: 0}
-    - target: {fileID: 5360139588222076474, guid: 90b0fa6cd92bb9341bfc42c4074c19a5, type: 3}
-      propertyPath: m_TagString
-      value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
