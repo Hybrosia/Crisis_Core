@@ -23,13 +23,12 @@ public class TrapBubbleController : MonoBehaviour
     private void Update()
     {
         if (Time.time < _timer) return;
-        print("TIME");
+        
         Pop();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        print("Collision" + other);
         if (other.CompareTag("PlayerBullet")) Pop();
     }
 
@@ -53,7 +52,6 @@ public class TrapBubbleController : MonoBehaviour
 
     private void Pop()
     {
-        print("Pop");
         _trappedEnemy.transform.parent = _originalParent;
         _trappedEnemy.GetComponent<IEnemyTrapManager>().Untrap();
         
