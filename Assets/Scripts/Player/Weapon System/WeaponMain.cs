@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using UnityEngine.InputSystem;
 
 public class WeaponMain : MonoBehaviour
 {
@@ -55,7 +54,7 @@ public class WeaponMain : MonoBehaviour
         TimeToSwap = weaponStats.swapTime;
         
         _timeSinceLastShot += Time.deltaTime;
-        if (Time.deltaTime > SwapTimer + TimeToSwap)
+        if (Time.time > SwapTimer + TimeToSwap)
         {
             IsSwap = false; 
         }
@@ -131,6 +130,8 @@ public class WeaponMain : MonoBehaviour
 
     private void OnFire()
     {
+        print("Spawn bullet");
+
         if (!CanShoot()) return;
 
         var screenCentreCoordinates = new Vector3(0.5f, 0f, 0f);

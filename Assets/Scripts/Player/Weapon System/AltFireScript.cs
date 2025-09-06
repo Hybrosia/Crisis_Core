@@ -37,9 +37,9 @@ public class AltFireScript : MonoBehaviour
         {
             case 0: _animator.Play("RushFireTestAnimation");
                 break;
-            case 1 : throw new NotImplementedException();
+            case 1 : //throw new NotImplementedException();
                 break;
-            case 2: throw new NotImplementedException();
+            case 2: //throw new NotImplementedException();
                 break;
         }
     }
@@ -85,12 +85,12 @@ public class AltFireScript : MonoBehaviour
 
     private void altFire1()
     {
-        TimerExit = Time.time; 
+        TimerExit = Time.time;
         
         if (TimerExit - TimerInit >= bounceFireMax)
         {
             GameObject bulletInstance = Instantiate(AltBullets[1], spawnPoint.transform.position, spawnPoint.transform.rotation);
-            bulletInstance.GetComponent<Rigidbody>().linearVelocity = spawnPoint.transform.forward * BounceFireMaxSpeed;
+            bulletInstance.GetComponent<BounceBubble>().movement = spawnPoint.transform.forward * BounceFireMaxSpeed;
             Destroy(bulletInstance, BounceFireMaxLifetime);
         }
     }

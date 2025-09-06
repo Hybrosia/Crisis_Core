@@ -883,7 +883,7 @@ GameObject:
   - component: {fileID: 543227644}
   m_Layer: 3
   m_Name: BounceBox
-  m_TagString: Untagged
+  m_TagString: BounceBox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1129,7 +1129,7 @@ MonoBehaviour:
   maxSlopeAngle: 55
   whatIsTerrain:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8187
 --- !u!136 &685205607
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1314,9 +1314,9 @@ MonoBehaviour:
   RushFireMaxSpeed: 10
   RushFireMinLifetime: 2
   RushFireMaxLifetime: 2
-  BounceFireMaxSpeed: 0
-  BounceFireMaxLifetime: 0
-  TrapFireMaxLifetime: 0
+  BounceFireMaxSpeed: 10
+  BounceFireMaxLifetime: 5
+  TrapFireMaxLifetime: 5
   TrapFireMaxSpeed: 0
   rushFireMin: 0.5
   rushFireMax: 1

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1416358617971876730}
   - component: {fileID: 2016596534532179414}
   - component: {fileID: 922492276780676614}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BounceBubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   force: 12
+  decelerationFactor: 0.9
+  timeToEnable: 0.2
+  timeToStop: 0.5
   animator: {fileID: 1416358617971876730}
+  movement: {x: 0, y: 0, z: 0}
 --- !u!135 &922492276780676614
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -103,7 +107,7 @@ GameObject:
   - component: {fileID: 4032894498155922771}
   - component: {fileID: 2025957451178556778}
   - component: {fileID: 6138776169024506638}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Bubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
