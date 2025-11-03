@@ -26,6 +26,8 @@ public class WeaponMain : MonoBehaviour
     public float TimeToSwap { get; private set; }
 
     public float _timeSinceLastShot;
+
+    private SpellsAndAbilities _spells;
     
     private Camera _camera; 
     void Start()
@@ -33,7 +35,9 @@ public class WeaponMain : MonoBehaviour
         _camera = Camera.main;
         _breathManager = GetComponent<BreathManager>();
 
-        CurrentWeapon = 0; 
+        CurrentWeapon = 0;
+
+        _spells = GetComponent<SpellsAndAbilities>();
         
         foreach (var weapon in weaponItem)
         {weapon.SetActive(false);}
@@ -81,7 +85,7 @@ public class WeaponMain : MonoBehaviour
     }
 
     public bool CanShoot() => _timeSinceLastShot > 1f / (weaponStats.fireRate / 60) &&
-                               _breathManager.Breath > weaponStats.breathUsage && !IsSwap; 
+                               _breathManager.Breath > weaponStats.breathUsage && !IsSwap && !_spells.isSpell; 
 
     private void OnCycleWeapon()
     {

@@ -189,6 +189,33 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BubbleDash"",
+                    ""type"": ""Button"",
+                    ""id"": ""384f277f-b29c-48ef-9085-18487fbcc288"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BubbleWave"",
+                    ""type"": ""Button"",
+                    ""id"": ""c590c0a9-4181-4810-9751-00fda2f78b57"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpringMist"",
+                    ""type"": ""Button"",
+                    ""id"": ""7569bf54-54cc-43f3-b477-8c969865d7c0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -618,6 +645,39 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""AltFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""07db201e-99c1-48ad-bb9d-699d1b117baa"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BubbleDash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e747af25-e00f-4bbf-a175-4c5199732e95"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BubbleWave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""815eab49-0d5f-4841-a46e-ed8ab2239482"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpringMist"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1216,6 +1276,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_AltFire = m_Player.FindAction("AltFire", throwIfNotFound: true);
+        m_Player_BubbleDash = m_Player.FindAction("BubbleDash", throwIfNotFound: true);
+        m_Player_BubbleWave = m_Player.FindAction("BubbleWave", throwIfNotFound: true);
+        m_Player_SpringMist = m_Player.FindAction("SpringMist", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1320,6 +1383,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_AltFire;
+    private readonly InputAction m_Player_BubbleDash;
+    private readonly InputAction m_Player_BubbleWave;
+    private readonly InputAction m_Player_SpringMist;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1375,6 +1441,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/AltFire".
         /// </summary>
         public InputAction @AltFire => m_Wrapper.m_Player_AltFire;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/BubbleDash".
+        /// </summary>
+        public InputAction @BubbleDash => m_Wrapper.m_Player_BubbleDash;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/BubbleWave".
+        /// </summary>
+        public InputAction @BubbleWave => m_Wrapper.m_Player_BubbleWave;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SpringMist".
+        /// </summary>
+        public InputAction @SpringMist => m_Wrapper.m_Player_SpringMist;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1434,6 +1512,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @AltFire.started += instance.OnAltFire;
             @AltFire.performed += instance.OnAltFire;
             @AltFire.canceled += instance.OnAltFire;
+            @BubbleDash.started += instance.OnBubbleDash;
+            @BubbleDash.performed += instance.OnBubbleDash;
+            @BubbleDash.canceled += instance.OnBubbleDash;
+            @BubbleWave.started += instance.OnBubbleWave;
+            @BubbleWave.performed += instance.OnBubbleWave;
+            @BubbleWave.canceled += instance.OnBubbleWave;
+            @SpringMist.started += instance.OnSpringMist;
+            @SpringMist.performed += instance.OnSpringMist;
+            @SpringMist.canceled += instance.OnSpringMist;
         }
 
         /// <summary>
@@ -1478,6 +1565,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @AltFire.started -= instance.OnAltFire;
             @AltFire.performed -= instance.OnAltFire;
             @AltFire.canceled -= instance.OnAltFire;
+            @BubbleDash.started -= instance.OnBubbleDash;
+            @BubbleDash.performed -= instance.OnBubbleDash;
+            @BubbleDash.canceled -= instance.OnBubbleDash;
+            @BubbleWave.started -= instance.OnBubbleWave;
+            @BubbleWave.performed -= instance.OnBubbleWave;
+            @BubbleWave.canceled -= instance.OnBubbleWave;
+            @SpringMist.started -= instance.OnSpringMist;
+            @SpringMist.performed -= instance.OnSpringMist;
+            @SpringMist.canceled -= instance.OnSpringMist;
         }
 
         /// <summary>
@@ -1855,6 +1951,27 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAltFire(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BubbleDash" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBubbleDash(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BubbleWave" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBubbleWave(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SpringMist" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpringMist(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
