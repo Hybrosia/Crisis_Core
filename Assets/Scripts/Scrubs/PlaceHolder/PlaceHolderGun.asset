@@ -16,3 +16,4 @@ MonoBehaviour:
   bulletSpeed: 50
   breathUsage: 5
   weaponDamage: 50
+  swapTime: 0.5

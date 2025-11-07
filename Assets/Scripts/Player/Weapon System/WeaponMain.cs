@@ -7,7 +7,8 @@ public class WeaponMain : MonoBehaviour
     [SerializeField] public WeaponStats weaponStats;
     [SerializeField] private GameObject currentWeaponItem;
     [SerializeField] private Transform spawnPoint;
-    [SerializeField] private GameObject bullet; 
+    [SerializeField] private GameObject bullet;
+    [SerializeField] private Animator weaponSelectAnimator, weaponAnimator;
 
     public List<WeaponStats> weaponStatsList = new List<WeaponStats>();
     [SerializeField] private List<GameObject> weaponItem;
@@ -63,7 +64,7 @@ public class WeaponMain : MonoBehaviour
             IsSwap = false; 
         }
         
-        OnCycleWeapon();
+        if (!IsSwap) OnCycleWeapon();
         
         if (InputManager.FirePressed)
         {
@@ -98,7 +99,17 @@ public class WeaponMain : MonoBehaviour
                 CurrentWeapon++; 
                 currentWeaponItem.SetActive(true);
                 IsSwap = true;
-                SwapTimer = Time.time; 
+                SwapTimer = Time.time;
+                if (CurrentWeapon == 1)
+                {
+                    weaponSelectAnimator.Play("RightBlower");
+                    weaponAnimator.Play("Blower");
+                }
+                else if (CurrentWeapon == 2)
+                {
+                    weaponSelectAnimator.Play("RightSniper");
+                    weaponAnimator.Play("Sniper");
+                }
             }
             else
             {
@@ -106,7 +117,9 @@ public class WeaponMain : MonoBehaviour
                 CurrentWeapon = 0;
                 currentWeaponItem.SetActive(true);
                 IsSwap = true;
-                SwapTimer = Time.time; 
+                SwapTimer = Time.time;
+                weaponSelectAnimator.Play("RightGun");
+                weaponAnimator.Play("BubbleGun");
             }
         }
 
@@ -118,7 +131,9 @@ public class WeaponMain : MonoBehaviour
                 CurrentWeapon = weaponStatsList.Count - 1;
                 currentWeaponItem.SetActive(true);
                 IsSwap = true;
-                SwapTimer = Time.time; 
+                SwapTimer = Time.time;
+                weaponSelectAnimator.Play("LeftSniper");
+                weaponAnimator.Play("Sniper");
             }
             else
             {
@@ -126,10 +141,19 @@ public class WeaponMain : MonoBehaviour
                 CurrentWeapon--; 
                 currentWeaponItem.SetActive(true);
                 IsSwap = true;
-                SwapTimer = Time.time; 
+                SwapTimer = Time.time;
+                if (CurrentWeapon == 0)
+                {
+                    weaponSelectAnimator.Play("LeftGun");
+                    weaponAnimator.Play("BubbleGun");
+                }
+                else if (CurrentWeapon == 1)
+                {
+                    weaponSelectAnimator.Play("LeftBlower");
+                    weaponAnimator.Play("Blower");
+                }
             }
         }
-            
     }
 
     private void OnFire()
@@ -137,6 +161,7 @@ public class WeaponMain : MonoBehaviour
         print("Spawn bullet");
 
         if (!CanShoot()) return;
+        weaponAnimator.SetTrigger("Fire");
 
         var screenCentreCoordinates = new Vector3(0.5f, 0f, 0f);
         var ray = _camera.ViewportPointToRay(screenCentreCoordinates);
