@@ -19,7 +19,8 @@ public class InputManager : MonoBehaviour
     public static bool PreviousPressed { get; private set; }
     public static bool NextPressed { get; private set; }
     public static bool FirePressed { get; private set; }
-    
+    public static bool FireHeld { get; private set; }
+
     public static bool BubbleDashPressed { get; private set; }
     public static bool BubbleWavePressed { get; private set; }
     public static bool SpringMistPressed { get; private set; }
@@ -36,6 +37,7 @@ public class InputManager : MonoBehaviour
         PreviousPressed = _inputSystem.Player.Previous.WasPressedThisFrame();
         NextPressed = _inputSystem.Player.Next.WasPressedThisFrame();
         FirePressed = _inputSystem.Player.Fire.WasPressedThisFrame();
+        FireHeld = _inputSystem.Player.Fire.IsPressed();
         AltFirePressed = _inputSystem.Player.AltFire.WasPressedThisFrame();
         AltFireReleased = _inputSystem.Player.AltFire.WasReleasedThisFrame();
         BubbleDashPressed = _inputSystem.Player.BubbleDash.WasPressedThisFrame();

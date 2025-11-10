@@ -106,8 +106,7 @@ public class Movement : MonoBehaviour
     {
         if (Sprint())
         {
-            _breathManager.Breath -= sprintBreath * Time.deltaTime;
-            _breathManager.timeSinceLastBreathUse = Time.time;
+            _breathManager.UseBreath(sprintBreath * Time.deltaTime);
             return runInputForce;
         }
         return movementInputForce;

@@ -66,9 +66,13 @@ public class WeaponMain : MonoBehaviour
         
         if (!IsSwap) OnCycleWeapon();
         
-        if (InputManager.FirePressed)
+        if ((!weaponStats.isAutomatic && InputManager.FirePressed) || (weaponStats.isAutomatic && InputManager.FireHeld))
         {
             OnFire();
+        }
+        else
+        {
+            weaponAnimator.SetBool("Fire", false);
         }
 
         if (InputManager.AltFirePressed)
@@ -80,13 +84,10 @@ public class WeaponMain : MonoBehaviour
         {
             OnAltRelease();
         }
-        
-        print("Current weapon" + CurrentWeapon);
-        
     }
 
-    public bool CanShoot() => _timeSinceLastShot > 1f / (weaponStats.fireRate / 60) &&
-                               _breathManager.Breath > weaponStats.breathUsage && !IsSwap && !_spells.isSpell; 
+    public bool CanShoot() => _timeSinceLastShot > weaponStats.fireRate &&
+               _breathManager.Breath >= weaponStats.breathUsage && !IsSwap && !_spells.isSpell;
 
     private void OnCycleWeapon()
     {
@@ -158,10 +159,8 @@ public class WeaponMain : MonoBehaviour
 
     private void OnFire()
     {
-        print("Spawn bullet");
-
         if (!CanShoot()) return;
-        weaponAnimator.SetTrigger("Fire");
+        weaponAnimator.SetBool("Fire", true);
 
         var screenCentreCoordinates = new Vector3(0.5f, 0f, 0f);
         var ray = _camera.ViewportPointToRay(screenCentreCoordinates);
@@ -172,8 +171,7 @@ public class WeaponMain : MonoBehaviour
         Destroy(bulletInstance, 6f);
 
         _timeSinceLastShot = 0f;
-        _breathManager.Breath -= weaponStats.breathUsage;
-        _breathManager.timeSinceLastBreathUse = Time.time;
+        _breathManager.UseBreath(weaponStats.breathUsage);
     }
 
     private void OnAltFire()

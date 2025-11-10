@@ -1888,6 +1888,7 @@ GameObject:
   - component: {fileID: 685205613}
   - component: {fileID: 685205614}
   - component: {fileID: 685205615}
+  - component: {fileID: 685205616}
   m_Layer: 3
   m_Name: PlayerObject
   m_TagString: Player
@@ -2088,7 +2089,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Breath: 0
   MaximumBreath: 100
-  timeSinceLastBreathUse: 0
   timeNeededForBreathRestoration: 10
   BreathIncrease: 5
   breathUI: {fileID: 1278881800}
@@ -2111,9 +2111,9 @@ MonoBehaviour:
   weaponSelectAnimator: {fileID: 274054905}
   weaponAnimator: {fileID: 1489193499}
   weaponStatsList:
-  - {fileID: 11400000, guid: 09ba3c7e856bed44f969c66bd993f75e, type: 2}
-  - {fileID: 11400000, guid: 09ba3c7e856bed44f969c66bd993f75e, type: 2}
-  - {fileID: 11400000, guid: 09ba3c7e856bed44f969c66bd993f75e, type: 2}
+  - {fileID: 11400000, guid: 27859eb2e39163441bc2304263b7a91a, type: 2}
+  - {fileID: 11400000, guid: fb5575b2a53393147a5e6bcacc289cf8, type: 2}
+  - {fileID: 11400000, guid: 85be2f07901095344bcb6e3736d00cc6, type: 2}
   weaponItem:
   - {fileID: 909645711}
   - {fileID: 909645711}
@@ -2180,6 +2180,21 @@ MonoBehaviour:
   bounceFireMax: 0
   trapFireMax: 0
   _animator: {fileID: 1134544122}
+--- !u!114 &685205616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685205601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 344853cd0824966449daa2a91dd8b238, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpellBullets: []
+  dashSpeed: 8
+  _spawnPoint: {fileID: 1134544120}
 --- !u!1 &727251862
 GameObject:
   m_ObjectHideFlags: 0
